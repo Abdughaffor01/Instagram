@@ -8,6 +8,7 @@ public class PostViewUser
     [MaxLength(100)]
     public string UserId { get; set; }
     public User User { get; set; }
+    
     public int PostViewId { get; set; }
     public PostView PostView { get; set; }
 }

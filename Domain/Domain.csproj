@@ -10,11 +10,13 @@
   <ItemGroup>
     <Folder Include="DTOs\ExternalAccountDTOs\" />
     <Folder Include="DTOs\LocationDTOs\" />
-    <Folder Include="DTOs\PostDTOs\" />
     <Folder Include="DTOs\ProfileDTOs\" />
     <Folder Include="DTOs\UserDTOs\" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Http.Features">
+      <HintPath>..\..\..\..\..\usr\lib\dotnet\shared\Microsoft.AspNetCore.App\7.0.13\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.Identity.Stores">
       <HintPath>..\..\..\..\..\usr\lib\dotnet\shared\Microsoft.AspNetCore.App\7.0.13\Microsoft.Extensions.Identity.Stores.dll</HintPath>
     </Reference>

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231108051851_oneToOne")]
-    partial class oneToOne
+    [Migration("20231108080635_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -512,7 +512,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.PostView", b =>
                 {
                     b.HasOne("Domain.Entities.Post", null)
-                        .WithMany("PostStatus")
+                        .WithMany("PostViews")
                         .HasForeignKey("PostId");
                 });
 
@@ -611,7 +611,7 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("PostLikes");
 
-                    b.Navigation("PostStatus");
+                    b.Navigation("PostViews");
                 });
 
             modelBuilder.Entity("Domain.Entities.PostLike", b =>

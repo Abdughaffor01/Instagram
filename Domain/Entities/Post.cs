@@ -17,7 +17,8 @@ public class Post
     
     public DateTime DatePublished { get; set; }
 
-    public IEnumerable<PostView> PostStatus { get; set; }
+    public IEnumerable<PostView> PostViews { get; set; }
+    
     public IEnumerable<PostLike> PostLikes { get; set; }
 
     public IEnumerable<PostFile> PostFiles { get; set; }
