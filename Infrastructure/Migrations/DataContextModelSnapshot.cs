@@ -509,7 +509,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.PostView", b =>
                 {
                     b.HasOne("Domain.Entities.Post", null)
-                        .WithMany("PostStatus")
+                        .WithMany("PostViews")
                         .HasForeignKey("PostId");
                 });
 
@@ -608,7 +608,7 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("PostLikes");
 
-                    b.Navigation("PostStatus");
+                    b.Navigation("PostViews");
                 });
 
             modelBuilder.Entity("Domain.Entities.PostLike", b =>

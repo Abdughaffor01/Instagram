@@ -6,6 +6,8 @@ using Infrastructure.Data;
 using Infrastructure.Seed;
 using Infrastructure.Services.AcountServices;
 using Infrastructure.Services.EmailServices;
+using Infrastructure.Services.FileServices;
+using Infrastructure.Services.PostServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +22,9 @@ var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<Ema
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<Seeder>();
+builder.Services.AddScoped<IFileService,FileService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IPostService, PostService>();
 
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddDbContext<DataContext>(c => c.UseNpgsql(connection));
