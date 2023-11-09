@@ -1,5 +1,3 @@
-using Domain.Entities;
-
 namespace Domain.DTOs.PostDTOs;
 
 public class GetPostDto : BasePostDto
@@ -7,6 +5,8 @@ public class GetPostDto : BasePostDto
     public string UserId { get; set; }
     
     public int Id { get; set; }
+
+    public DateTime DatePublished { get; set; }
 
     public PostViewDto PostViews { get; set; }
 
