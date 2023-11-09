@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231109073828_first")]
+    partial class first
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,32 +24,6 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Domain.Entities.Chat", b =>
-                {
-                    b.Property<int>("ChatId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ChatId"));
-
-                    b.Property<string>("ReceiveUserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("SendUserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("ChatId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Chats");
-                });
 
             modelBuilder.Entity("Domain.Entities.ExternalAccount", b =>
                 {
@@ -112,37 +89,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Locations");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Messange", b =>
-                {
-                    b.Property<int>("MessangeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MessangeId"));
-
-                    b.Property<int>("ChatId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("MessangeTest")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("SendMessangeDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("MessangeId");
-
-                    b.HasIndex("ChatId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Messanges");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
@@ -505,15 +451,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Chat", b =>
-                {
-                    b.HasOne("Domain.Entities.User", "User")
-                        .WithMany("Chats")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Domain.Entities.ExternalAccount", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
@@ -525,13 +462,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-
-            modelBuilder.Entity("Domain.Entities.Messange", b =>
-                {
-                    b.HasOne("Domain.Entities.Chat", "Chat")
-                        .WithMany("Messanges")
-                        .HasForeignKey("ChatId")
-
             modelBuilder.Entity("Domain.Entities.FavoriteUser", b =>
                 {
                     b.HasOne("Domain.Entities.Post", "Post")
@@ -541,18 +471,12 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.User", "User")
-                        .WithMany("Messanges")
-
                         .WithMany("FavoriteUsers")
-
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Chat");
-
                     b.Navigation("Post");
-
 
                     b.Navigation("User");
                 });
@@ -709,11 +633,6 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.Chat", b =>
-                {
-                    b.Navigation("Messanges");
-                });
-
             modelBuilder.Entity("Domain.Entities.Post", b =>
                 {
                     b.Navigation("FavoriteUsers");
@@ -739,15 +658,10 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
-                    b.Navigation("Chats");
-
                     b.Navigation("ExternalAccount")
                         .IsRequired();
 
-                    b.Navigation("Messanges");
-
                     b.Navigation("FavoriteUsers");
-
 
                     b.Navigation("Post");
 
