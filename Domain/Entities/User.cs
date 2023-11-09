@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Identity;
-
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
 namespace Domain.Entities;
 
 public class User : IdentityUser
