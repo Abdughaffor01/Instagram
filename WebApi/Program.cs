@@ -6,6 +6,7 @@ using Infrastructure.Data;
 using Infrastructure.Seed;
 using Infrastructure.Services.AcountServices;
 using Infrastructure.Services.EmailServices;
+using Infrastructure.Services.FavoriteServices;
 using Infrastructure.Services.FileServices;
 using Infrastructure.Services.PostServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,6 +26,7 @@ builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<IFileService,FileService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IFavoriteService,FavoriteService>();
 
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddDbContext<DataContext>(c => c.UseNpgsql(connection));
