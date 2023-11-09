@@ -10,8 +10,11 @@ public class MessageDto
     public MessageDto(IEnumerable<string> to, string subject, string content)
     {
         To = new List<MailboxAddress>();
+        
         To.AddRange(to.Select(x => new MailboxAddress("mail",x)));
+
         Subject = subject;
+        
         Content = content;        
     }
 }

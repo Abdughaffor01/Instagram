@@ -246,6 +246,31 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FavoriteUsers",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    PostId = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FavoriteUsers", x => new { x.UserId, x.PostId });
+                    table.ForeignKey(
+                        name: "FK_FavoriteUsers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FavoriteUsers_Posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PostFiles",
                 columns: table => new
                 {
@@ -269,38 +294,36 @@ namespace Infrastructure.Migrations
                 name: "PostLike",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Like = table.Column<int>(type: "integer", nullable: false),
-                    PostId = table.Column<int>(type: "integer", nullable: true)
+                    PostId = table.Column<int>(type: "integer", nullable: false),
+                    Like = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PostLike", x => x.Id);
+                    table.PrimaryKey("PK_PostLike", x => x.PostId);
                     table.ForeignKey(
                         name: "FK_PostLike_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PostViews",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    View = table.Column<int>(type: "integer", nullable: false),
-                    PostId = table.Column<int>(type: "integer", nullable: true)
+                    PostId = table.Column<int>(type: "integer", nullable: false),
+                    View = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PostViews", x => x.Id);
+                    table.PrimaryKey("PK_PostViews", x => x.PostId);
                     table.ForeignKey(
                         name: "FK_PostViews_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -324,7 +347,7 @@ namespace Infrastructure.Migrations
                         name: "FK_PostLikeUsers_PostLike_PostLikeId",
                         column: x => x.PostLikeId,
                         principalTable: "PostLike",
-                        principalColumn: "Id",
+                        principalColumn: "PostId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -349,7 +372,7 @@ namespace Infrastructure.Migrations
                         name: "FK_PostViewUsers_PostViews_PostViewId",
                         column: x => x.PostViewId,
                         principalTable: "PostViews",
-                        principalColumn: "Id",
+                        principalColumn: "PostId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -391,13 +414,13 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostFiles_PostId",
-                table: "PostFiles",
+                name: "IX_FavoriteUsers_PostId",
+                table: "FavoriteUsers",
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostLike_PostId",
-                table: "PostLike",
+                name: "IX_PostFiles_PostId",
+                table: "PostFiles",
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
@@ -408,13 +431,7 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PostViewUsers_PostViewId",
                 table: "PostViewUsers",
-                column: "PostViewId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PostViews_PostId",
-                table: "PostViews",
-                column: "PostId");
+                column: "PostViewId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_UserId",
@@ -447,6 +464,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ExternalAccounts");
+
+            migrationBuilder.DropTable(
+                name: "FavoriteUsers");
 
             migrationBuilder.DropTable(
                 name: "PostFiles");

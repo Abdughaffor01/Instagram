@@ -12,8 +12,6 @@
   <ItemGroup>
     <Folder Include="DTOs\ExternalAccountDTOs\" />
     <Folder Include="DTOs\LocationDTOs\" />
-    <Folder Include="DTOs\ProfileDTOs\" />
-    <Folder Include="DTOs\UserDTOs\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.Http.Features">
