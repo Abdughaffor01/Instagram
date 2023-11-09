@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.DTOs.ProfileDTOs;
 
-namespace Infrastructure.Services.ProfileServices
+namespace Infrastructure.Services.ProfileServices;
+
+public interface IProfileService
 {
-    public interface IProfileService
-    {
-    }
+    public Task<Response<UpdateProfileDto>> UpdateProfileAsync(string userId,UpdateProfileDto model);
+    public Task<Response<string>> UpdatePhotoAsync(string userId,IFormFile photo);
 }

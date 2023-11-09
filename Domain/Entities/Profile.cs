@@ -10,23 +10,22 @@ public class Profile
     public User User { get; set; }
     
     [MaxLength(50)]
-    public string FirstName { get; set; }
+    public string? FirstName { get; set; }
     
     [MaxLength(50)]
-    public string LastName { get; set; }
+    public string? LastName { get; set; }
 
-    public Gender Gender { get; set; }
-    public DateOnly DOB { get; set; }
+    public Gender? Gender { get; set; }
+    
+    public DateOnly? DOB { get; set; }
     
     [MaxLength(50)]
-    public string Occupation { get; set; }
+    public string? Occupation { get; set; }
     
     [MaxLength(500)]
-    public string About { get; set; }
+    public string? About { get; set; }
 
     public string? Photo { get; set; }
     
     public DateTime? DateUpdated { get; set; }
-    
-    public Location Location { get; set; }
 }
