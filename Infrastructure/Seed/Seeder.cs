@@ -6,8 +6,8 @@ namespace Infrastructure.Seed;
 public class Seeder
 {
     private readonly DataContext _context;
-    private readonly UserManager<User> _userManager;
-    public Seeder(UserManager<User> userManager, DataContext context)
+    private readonly UserManager<ApplicationUser> _userManager;
+    public Seeder(UserManager<ApplicationUser> userManager, DataContext context)
     {
         _userManager = userManager;
         _context = context;
@@ -18,7 +18,7 @@ public class Seeder
         var existing = await _userManager.FindByNameAsync("SuperAdmin");
         if (existing != null) return false;
 
-        var identity = new User()
+        var identity = new ApplicationUser()
         {
             UserName = "SuperAdmin",
             PhoneNumber = "+992987849660",

@@ -6,7 +6,7 @@ public class Location
 {
     [Key]
     public string UserId { get; set; }
-    public User User { get; set; }
+    public ApplicationUser ApplicationUser { get; set; }
     
     [MaxLength(50)]
     public string? City { get; set; }

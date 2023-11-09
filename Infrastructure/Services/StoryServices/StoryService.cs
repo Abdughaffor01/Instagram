@@ -8,10 +8,10 @@ namespace Infrastructure.Services.StoryServices
     public class StoryService : IStoryService
     {
         private readonly DataContext _dataContext;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IFileService _fileService;
 
-        public StoryService(DataContext dataContext,UserManager<User> userManager,
+        public StoryService(DataContext dataContext,UserManager<ApplicationUser> userManager,
             IFileService fileService)
         {
             _dataContext = dataContext;
