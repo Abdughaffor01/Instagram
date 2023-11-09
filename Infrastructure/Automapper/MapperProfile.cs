@@ -17,6 +17,5 @@ public class MapperProfile : AutoMapper.Profile
         CreateMap<AddChatDto, Chat>();
 
         CreateMap<Messange, MessageDto>().ReverseMap();
-
     }
 }

@@ -1,18 +1,11 @@
-﻿using Domain.DTOs.PostDTOs;
-using Domain.DTOs.StoryDTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.DTOs.StoryDTOs;
 
-namespace Infrastructure.Services.StoryServices
+namespace Infrastructure.Services.StoryServices;
+
+public interface IStoryService
 {
-    public interface IStoryService
-    {
-        public Task<Response<int>> AddStoryAsync(AddStoryDTO model);
-        public Task<Response<string>> DeleteStoryAsync(int id);
-        public Task<Response<ICollection<GetStoryDTO>>> GetStoriesAsync();
-        public Task<Response<GetStoryDTO>> GetStoryAsync(int id);
-    }
+    public Task<Response<int>> AddStoryAsync(string userId, AddStoryDto model);
+    public Task<Response<string>> DeleteStoryAsync(int id);
+    public Task<Response<ICollection<GetStoryDto>>> GetStoriesAsync();
+    public Task<Response<GetStoryDto>> GetStoryAsync(int id);
 }

@@ -24,19 +24,19 @@ public class AccountService : IAccountService
         var mapped = new User()
         {
             UserName = model.Username,
-            Email = model.Email,
-            PhoneNumber = model.PhoneNumber
         };
         
         var response = await _userManager.CreateAsync(mapped, model.Password);
 
         if (response.Succeeded)
         {
-            var profile = new Profile() { UserId = mapped.Id,};
-            var location = new Location(){ UserId = mapped.Id };
+            var profile = new Profile() { UserId = mapped.Id, };
+            var location = new Location() { UserId = mapped.Id };
             await _context.Profiles.AddAsync(profile);
             await _context.Locations.AddAsync(location);
         }
+        else return new Response<RegisterDto>(HttpStatusCode.BadRequest, "Username exist please inter another username");
+
         await _context.SaveChangesAsync();
 
         return new Response<RegisterDto>(model);
@@ -67,8 +67,7 @@ public class AccountService : IAccountService
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var claims = new List<Claim>()
         {
-            new Claim(JwtRegisteredClaimNames.Name, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Name, user.UserName!),
             new Claim(JwtRegisteredClaimNames.Sid, user.Id),
         };
 

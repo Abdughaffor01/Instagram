@@ -10,6 +10,4 @@ public class RegisterDto
 
     [Compare("Password")]
     public string ConfirmPassword { get; set; }
-    public string Email { get; set; }
-    public string PhoneNumber { get; set; }
 }

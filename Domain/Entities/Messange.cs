@@ -1,6 +1,3 @@
-using System.Reflection.Metadata.Ecma335;
-using System.Security.AccessControl;
-
 namespace Domain.Entities;
 
 public class Messange
@@ -18,6 +15,4 @@ public class Messange
     public Chat Chat { get; set; }
     
     public User User { get; set; }
-    
-    
 }
