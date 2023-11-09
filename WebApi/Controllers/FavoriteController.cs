@@ -1,8 +1,10 @@
 using Infrastructure.Services.FavoriteServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace WebApi.Controllers;
 
 [Route("[controller]")]
+[Authorize]
 public class FavoriteController : ControllerBase
 {
     private readonly IFavoriteService _service;

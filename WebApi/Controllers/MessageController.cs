@@ -1,5 +1,3 @@
-using Domain.DTOs.MessangeDto;
-using Domain.Response;
 using Infrastructure.Services.MessangeServises;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -5,12 +5,12 @@ namespace Infrastructure.Services.AcountServices;
 
 public class AccountService : IAccountService
 {
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly DataContext _context;
     private readonly IConfiguration _configuration;
     private readonly IEmailService _emailService;
 
-    public AccountService(UserManager<User> userManager,
+    public AccountService(UserManager<ApplicationUser> userManager,
         IConfiguration configuration,IEmailService emailService, DataContext context)
     {
         _userManager = userManager;
@@ -21,22 +21,22 @@ public class AccountService : IAccountService
 
     public async Task<Response<RegisterDto>> Register(RegisterDto model)
     {
-        var mapped = new User()
+        var mapped = new ApplicationUser()
         {
             UserName = model.Username,
-            Email = model.Email,
-            PhoneNumber = model.PhoneNumber
         };
         
         var response = await _userManager.CreateAsync(mapped, model.Password);
 
         if (response.Succeeded)
         {
-            var profile = new Profile() { UserId = mapped.Id,};
-            var location = new Location(){ UserId = mapped.Id };
+            var profile = new Profile() { UserId = mapped.Id, };
+            var location = new Location() { UserId = mapped.Id };
             await _context.Profiles.AddAsync(profile);
             await _context.Locations.AddAsync(location);
         }
+        else return new Response<RegisterDto>(HttpStatusCode.BadRequest, "Username exist please inter another username");
+
         await _context.SaveChangesAsync();
 
         return new Response<RegisterDto>(model);
@@ -60,16 +60,15 @@ public class AccountService : IAccountService
     }
 
     //Method to generate The Token
-    private async Task<string> GenerateJwtToken(User user)
+    private async Task<string> GenerateJwtToken(ApplicationUser applicationUser)
     {
-        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
         var securityKey = new SymmetricSecurityKey(key);
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var claims = new List<Claim>()
         {
-            new Claim(JwtRegisteredClaimNames.Name, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Sid, user.Id),
+            new Claim(JwtRegisteredClaimNames.Name, applicationUser.UserName!),
+            new Claim(JwtRegisteredClaimNames.Sid, applicationUser.Id),
         };
 
         var token = new JwtSecurityToken(

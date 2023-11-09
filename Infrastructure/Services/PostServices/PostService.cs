@@ -9,10 +9,10 @@ public class PostService : IPostService
 {
     private readonly DataContext _context;
     private readonly IMapper _mapper;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IFileService _fileService;
 
-    public PostService(DataContext context, IMapper mapper, UserManager<User> userManager, IFileService fileService)
+    public PostService(DataContext context, IMapper mapper, UserManager<ApplicationUser> userManager, IFileService fileService)
     {
         _context = context;
         _mapper = mapper;

@@ -12,6 +12,7 @@ using Infrastructure.Services.FileServices;
 using Infrastructure.Services.MessangeServises;
 using Infrastructure.Services.PostServices;
 using Infrastructure.Services.ProfileServices;
+using Infrastructure.Services.StoryServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -36,12 +37,14 @@ builder.Services.AddScoped<IChatServise, ChatServise>();
 builder.Services.AddScoped<IFavoriteService,FavoriteService>();
 builder.Services.AddScoped<IProfileService,ProfileService>();
 
+builder.Services.AddScoped<IStoryService,StoryService>();
+
 
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddDbContext<DataContext>(c => c.UseNpgsql(connection));
 
 
-builder.Services.AddIdentity<User, IdentityRole>(config =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(config =>
     {
         config.Password.RequiredLength = 4;
         config.Password.RequireDigit = false;
