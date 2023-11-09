@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231108080635_first")]
+    [Migration("20231109073828_first")]
     partial class first
     {
         /// <inheritdoc />
@@ -38,6 +38,24 @@ namespace Infrastructure.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("ExternalAccounts");
+                });
+
+            modelBuilder.Entity("Domain.Entities.FavoriteUser", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserId", "PostId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("FavoriteUsers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Location", b =>
@@ -129,21 +147,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.PostLike", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("PostId")
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Like")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("PostId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
+                    b.HasKey("PostId");
 
                     b.ToTable("PostLike");
                 });
@@ -168,21 +178,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.PostView", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("PostId")
+                    b.Property<int>("PostId")
                         .HasColumnType("integer");
 
                     b.Property<int>("View")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
+                    b.HasKey("PostId");
 
                     b.ToTable("PostViews");
                 });
@@ -201,8 +203,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("UserId", "PostViewId");
 
-                    b.HasIndex("PostViewId")
-                        .IsUnique();
+                    b.HasIndex("PostViewId");
 
                     b.ToTable("PostViewUsers");
                 });
@@ -461,6 +462,25 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.FavoriteUser", b =>
+                {
+                    b.HasOne("Domain.Entities.Post", "Post")
+                        .WithMany("FavoriteUsers")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("FavoriteUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.Post", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
@@ -485,15 +505,19 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.PostLike", b =>
                 {
-                    b.HasOne("Domain.Entities.Post", null)
-                        .WithMany("PostLikes")
-                        .HasForeignKey("PostId");
+                    b.HasOne("Domain.Entities.Post", "Post")
+                        .WithOne("PostLikes")
+                        .HasForeignKey("Domain.Entities.PostLike", "PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Domain.Entities.PostLikeUser", b =>
                 {
                     b.HasOne("Domain.Entities.PostLike", "PostLike")
-                        .WithMany("PostLikeUser")
+                        .WithMany("Users")
                         .HasForeignKey("PostLikeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -511,16 +535,20 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.PostView", b =>
                 {
-                    b.HasOne("Domain.Entities.Post", null)
-                        .WithMany("PostViews")
-                        .HasForeignKey("PostId");
+                    b.HasOne("Domain.Entities.Post", "Post")
+                        .WithOne("PostViews")
+                        .HasForeignKey("Domain.Entities.PostView", "PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Domain.Entities.PostViewUser", b =>
                 {
                     b.HasOne("Domain.Entities.PostView", "PostView")
-                        .WithOne("Users")
-                        .HasForeignKey("Domain.Entities.PostViewUser", "PostViewId")
+                        .WithMany("Users")
+                        .HasForeignKey("PostViewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -607,28 +635,33 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
                 {
+                    b.Navigation("FavoriteUsers");
+
                     b.Navigation("PostFiles");
 
-                    b.Navigation("PostLikes");
+                    b.Navigation("PostLikes")
+                        .IsRequired();
 
-                    b.Navigation("PostViews");
+                    b.Navigation("PostViews")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.PostLike", b =>
                 {
-                    b.Navigation("PostLikeUser");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.PostView", b =>
                 {
-                    b.Navigation("Users")
-                        .IsRequired();
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Navigation("ExternalAccount")
                         .IsRequired();
+
+                    b.Navigation("FavoriteUsers");
 
                     b.Navigation("Post");
 
