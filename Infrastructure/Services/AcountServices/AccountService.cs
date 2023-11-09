@@ -1,3 +1,4 @@
+using Infrastructure.Data;
 using Infrastructure.Services.EmailServices;
 
 namespace Infrastructure.Services.AcountServices;
@@ -5,15 +6,17 @@ namespace Infrastructure.Services.AcountServices;
 public class AccountService : IAccountService
 {
     private readonly UserManager<User> _userManager;
+    private readonly DataContext _context;
     private readonly IConfiguration _configuration;
     private readonly IEmailService _emailService;
 
     public AccountService(UserManager<User> userManager,
-        IConfiguration configuration,IEmailService emailService)
+        IConfiguration configuration,IEmailService emailService, DataContext context)
     {
         _userManager = userManager;
         _configuration = configuration;
         _emailService = emailService;
+        _context = context;
     }
 
     public async Task<Response<RegisterDto>> Register(RegisterDto model)
@@ -26,8 +29,17 @@ public class AccountService : IAccountService
         };
         
         var response = await _userManager.CreateAsync(mapped, model.Password);
-        if (response.Succeeded) return new Response<RegisterDto>(model);
-        else return new Response<RegisterDto>(HttpStatusCode.BadRequest, "something is wrong");
+
+        if (response.Succeeded)
+        {
+            var profile = new Profile() { UserId = mapped.Id,};
+            var location = new Location(){ UserId = mapped.Id };
+            await _context.Profiles.AddAsync(profile);
+            await _context.Locations.AddAsync(location);
+        }
+        await _context.SaveChangesAsync();
+
+        return new Response<RegisterDto>(model);
     }
     
     public async Task<Response<string>> Login(LoginDto login)

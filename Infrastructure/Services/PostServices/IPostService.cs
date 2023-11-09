@@ -1,4 +1,3 @@
-using Domain.DTOs.FavoriteDTOs;
 using Domain.DTOs.PostDTOs;
 
 namespace Infrastructure.Services.PostServices;
