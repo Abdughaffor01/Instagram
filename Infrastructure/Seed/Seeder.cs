@@ -1,9 +1,17 @@
+using Domain.Enums;
+using Infrastructure.Data;
+
 namespace Infrastructure.Seed;
 
 public class Seeder
 {
+    private readonly DataContext _context;
     private readonly UserManager<User> _userManager;
-    public Seeder(UserManager<User> userManager) => _userManager = userManager;
+    public Seeder(UserManager<User> userManager, DataContext context)
+    {
+        _userManager = userManager;
+        _context = context;
+    }
 
     public async Task<bool> SeedUser()
     {

@@ -1,52 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Domain.DTOs.StoryDTOs;
+﻿using Domain.DTOs.StoryDTOs;
 using Domain.Enums;
 using Infrastructure.Data;
 using Infrastructure.Services.FileServices;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Infrastructure.Services.StoryServices
 {
     public class StoryService : IStoryService
     {
         private readonly DataContext _dataContext;
-        private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly IFileService _fileService;
 
-        public StoryService(DataContext dataContext, IMapper mapper, UserManager<User> userManager, IFileService fileService)
+        public StoryService(DataContext dataContext,UserManager<User> userManager,
+            IFileService fileService)
         {
             _dataContext = dataContext;
-            _mapper = mapper;
             _userManager = userManager;
             _fileService = fileService;
         }
-        public async Task<Response<int>> AddStoryAsync(AddStoryDTO model)
+
+        public async Task<Response<int>> AddStoryAsync(string userId, AddStoryDto model)
         {
             try
             {
-                var user = await _userManager.FindByIdAsync(model.UserId);
-                var post=await _dataContext.Posts.FindAsync(model.PostId);
+                var user = await _userManager.FindByIdAsync(userId);
+                var post = await _dataContext.Posts.FindAsync(model.PostId);
                 if (user == null) return new Response<int>(HttpStatusCode.BadRequest, "User or post doesn`t exist!");
-                if (model.PostId == null && model.File == null) return new Response<int>(HttpStatusCode.BadRequest, "Something is wrong!");
+                if (model.PostId == null && model.File == null)
+                    return new Response<int>(HttpStatusCode.BadRequest, "Something is wrong!");
 
-                var fileName=string.Empty;
+                var fileName = string.Empty;
                 var postId = 0;
-                if(model.PostId!=null) postId = (int)model.PostId;
-                if(model.File!=null) fileName = await _fileService.AddFileAsync(model.File!, "Files");
+                if (model.PostId != null) postId = (int)model.PostId;
+                if (model.File != null) fileName = await _fileService.AddFileAsync(model.File!, "Files");
 
                 var story = new Story()
                 {
-                    UserId = model.UserId,
+                    UserId = userId,
                     PostId = postId,
                     CreatedAt = DateTime.UtcNow,
-                    FileName=fileName,
-                    StatusStory=StatusStory.Active
+                    FileName = fileName,
+                    StatusStory = StatusStory.Active
                 };
                 await _dataContext.Stories.AddAsync(story);
                 await _dataContext.SaveChangesAsync();
@@ -64,11 +58,10 @@ namespace Infrastructure.Services.StoryServices
             {
                 var story = await _dataContext.Stories.FindAsync(id);
                 if (story == null) return new Response<string>(HttpStatusCode.NotFound, "Data not found!");
-                if(story.FileName!=null)  await _fileService.DeleteFileAsync(story.FileName, "Files");
+                if (story.FileName != "") await _fileService.DeleteFileAsync(story.FileName, "Files");
                 _dataContext.Stories.Remove(story);
                 await _dataContext.SaveChangesAsync();
                 return new Response<string>(HttpStatusCode.OK, "Story deleted!");
-
             }
             catch (Exception ex)
             {
@@ -76,31 +69,43 @@ namespace Infrastructure.Services.StoryServices
             }
         }
 
-        public async Task<Response<ICollection<GetStoryDTO>>> GetStoriesAsync()
+        public async Task<Response<ICollection<GetStoryDto>>> GetStoriesAsync()
         {
-            var stories = await _dataContext.Stories.Select(s => new GetStoryDTO()
+            /*var storiesStatus =
+                await _dataContext.Stories.Where(s => s.StatusStory == StatusStory.Active).ToListAsync();
+            foreach (var story in storiesStatus)
+            {
+                if (story.CreatedAt.AddMinutes(1) <= DateTime.UtcNow)
+                {
+                    story.StatusStory = StatusStory.Archive;
+                }
+            }*/
+            await _dataContext.SaveChangesAsync();
+            
+            
+            var stories = await _dataContext.Stories.Select(s => new GetStoryDto()
             {
                 UserId = s.UserId,
                 PostId = s.PostId,
                 CreatedAt = s.CreatedAt,
                 FileName = s.FileName
             }).ToListAsync();
-            return new Response<ICollection<GetStoryDTO>>(stories);
-
+            
+            return new Response<ICollection<GetStoryDto>>(stories);
         }
 
-        public async Task<Response<GetStoryDTO>> GetStoryAsync(int id)
+        public async Task<Response<GetStoryDto>> GetStoryAsync(int id)
         {
             var story = await _dataContext.Stories.FindAsync(id);
-            if (story == null) return new Response<GetStoryDTO>(HttpStatusCode.NotFound, "Data not found!");
-            var mapped = new GetStoryDTO()
+            if (story == null) return new Response<GetStoryDto>(HttpStatusCode.NotFound, "Data not found!");
+            var mapped = new GetStoryDto()
             {
                 UserId = story.UserId,
                 PostId = story.PostId,
                 CreatedAt = story.CreatedAt,
                 FileName = story.FileName
             };
-            return new Response<GetStoryDTO>(mapped);
+            return new Response<GetStoryDto>(mapped);
         }
     }
 }
