@@ -24,7 +24,7 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     public DbSet<ExternalAccount> ExternalAccounts { get; set; }
     public DbSet<Chat> Chats { get; set; }
     
-    public DbSet<Messange> Messanges { get; set; } 
+    public DbSet<Message> Messanges { get; set; } 
     
     public DbSet<PostFile> PostFiles { get; set; }
     

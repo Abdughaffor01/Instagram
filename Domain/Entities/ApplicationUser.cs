@@ -16,9 +16,10 @@ public class ApplicationUser : IdentityUser
     
     public IEnumerable<PostLikeUser> PostLikeUsers  { get; set; }
 
-    public IEnumerable<Messange> Messanges { get; set; }
+    public IEnumerable<Message> Messanges { get; set; }
     
     public IEnumerable<Chat> Chats { get; set; }
 
     public IEnumerable<FavoriteUser> FavoriteUsers { get; set; }
+
 }

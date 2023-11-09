@@ -14,5 +14,5 @@ public class Chat
 
     public ApplicationUser ApplicationUser { get; set; }
 
-    public List<Messange> Messanges { get; set; }
+    public List<Message> Messages { get; set; }
 }

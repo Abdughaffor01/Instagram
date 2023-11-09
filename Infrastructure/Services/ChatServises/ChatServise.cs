@@ -1,5 +1,6 @@
 using AutoMapper;
 using Domain.DTOs.ChatDto;
+using Domain.DTOs.MessangeDto;
 using Infrastructure.Data;
 
 namespace Infrastructure.Services.ChatServises;
@@ -19,7 +20,7 @@ public class ChatServise:IChatServise
     {
         var chat = await _cotext.Chats.ToListAsync();
        
-        if (chat == null) return new Response<List<GetChatDto>>(HttpStatusCode.BadRequest, "Chat not found");
+        if (chat.Count == 0) return new Response<List<GetChatDto>>(HttpStatusCode.BadRequest, "Chat not found");
 
         var getChat = _mapper.Map<List<GetChatDto>>(chat);
         
@@ -29,15 +30,14 @@ public class ChatServise:IChatServise
 
     public async Task<Response<GetChatDto>> AddChat(AddChatDto model)
     {
-        var sendUser = await _cotext.Users.FindAsync(model.SendUserId);
-        
+
         var receiveUser= await _cotext.Users.FindAsync(model.ReceiveUserId);
         
-        if (sendUser == null || receiveUser == null) return new Response<GetChatDto>(HttpStatusCode.BadRequest,"Error");
+        if (receiveUser == null) return new Response<GetChatDto>(HttpStatusCode.BadRequest,"Error");
 
         var addChat = _mapper.Map<Chat>(model);
-        
-        _cotext.Chats.AddAsync(addChat);
+       
+        await _cotext.Chats.AddAsync(addChat);
         
         await _cotext.SaveChangesAsync();
 
@@ -50,8 +50,7 @@ public class ChatServise:IChatServise
         var chat = await _cotext.Chats.FindAsync(model.ChatId);
         
         if (chat == null) return new Response<GetChatDto>(HttpStatusCode.BadRequest,"Chat not found");
-
-        chat.SendUserId = model.SendUserId;
+        
         chat.ReceiveUserId = model.ReceiveUserId;
 
        await _cotext.SaveChangesAsync();
@@ -69,5 +68,27 @@ public class ChatServise:IChatServise
         await _cotext.SaveChangesAsync();
 
         return new Response<GetChatDto>(HttpStatusCode.OK,"Delete Chat");
+    }
+
+    public async Task<Response<GetChatDto>> GetById( int id)
+    {
+        var chat = await _cotext.Chats.FindAsync(id);
+        if (chat == null) return new Response<GetChatDto>(HttpStatusCode.BadRequest,"Chat not found");
+
+        var getChat = new GetChatDto()
+        {
+            ChatId = chat.ChatId,
+            ReceiveUserId = chat.ReceiveUserId,
+            Messages = chat.Messages.Select(x => new GetMessageDto()
+            {
+               
+                MessageText = x.MessageText,
+                SendMessageDate = x.SendMessageDate
+            }).ToList()
+        };
+        return new Response<GetChatDto>(getChat);
+
+
+
     }
 }
