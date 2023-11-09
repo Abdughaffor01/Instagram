@@ -9,6 +9,7 @@ using Infrastructure.Services.EmailServices;
 using Infrastructure.Services.FavoriteServices;
 using Infrastructure.Services.FileServices;
 using Infrastructure.Services.PostServices;
+using Infrastructure.Services.ProfileServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ builder.Services.AddScoped<IFileService,FileService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IFavoriteService,FavoriteService>();
+builder.Services.AddScoped<IProfileService,ProfileService>();
 
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddDbContext<DataContext>(c => c.UseNpgsql(connection));
