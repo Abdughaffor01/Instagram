@@ -1,5 +1,4 @@
 using AutoMapper;
-using Domain.DTOs.FavoriteDTOs;
 using Domain.DTOs.PostDTOs;
 using Infrastructure.Data;
 using Infrastructure.Services.FileServices;
@@ -32,6 +31,7 @@ public class PostService : IPostService
                 UserId = p.UserId,
                 Title = p.Title,
                 Content = p.Content,
+                DatePublished = p.DatePublished,
                 PostFiles = p.PostFiles.Select(pf => pf.Name),
                 PostViews = new PostViewDto()
                 {
@@ -67,6 +67,7 @@ public class PostService : IPostService
                 UserId = p.UserId,
                 Title = p.Title,
                 Content = p.Content,
+                DatePublished = p.DatePublished,
                 PostFiles = p.PostFiles.Select(pf => pf.Name),
                 PostViews = new PostViewDto()
                 {
