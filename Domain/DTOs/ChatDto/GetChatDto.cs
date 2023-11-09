@@ -1,19 +1,14 @@
-using System.ComponentModel.DataAnnotations;
-using System.Security.AccessControl;
+using Domain.Entities;
 
-namespace Domain.Entities;
+namespace Domain.DTOs.ChatDto;
 
-public class Chat
-  {   
-    [Key]
+public class GetChatDto
+{
     public int ChatId { get; set; }
     
     public string SendUserId { get; set; }
     
     public string ReceiveUserId { get; set; }
-   
-    public User User { get; set; }
     
     public List<Messange> Messanges { get; set; }
-    
-  }
+}

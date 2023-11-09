@@ -2,20 +2,27 @@ namespace Infrastructure.Data;
 
 public class DataContext :IdentityDbContext<User>
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options)
-    {
-        
-    }
+    public DataContext(DbContextOptions<DataContext> options) : base(options) {}
     
     public DbSet<User> Users { get; set; }
+    
     public DbSet<Profile> Profiles  { get; set; }
     public DbSet<Post> Posts  { get; set; }
+    
     public DbSet<PostViewUser> PostViewUsers { get; set; }
+    
     public DbSet<PostView> PostViews { get; set; }
+    
     public PostLikeUser PostLikeUser { get; set; }
+    
     public DbSet<PostLikeUser> PostLikeUsers { get; set; }
+    
     public DbSet<Location> Locations { get; set; }
+    
     public DbSet<ExternalAccount> ExternalAccounts { get; set; }
+    public DbSet<Chat> Chats { get; set; }
+    
+    public DbSet<Messange> Messanges { get; set; } 
     public DbSet<PostFile> PostFiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

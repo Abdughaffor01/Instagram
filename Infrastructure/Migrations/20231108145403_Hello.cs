@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class first : Migration
+    public partial class Hello : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -174,6 +174,26 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Chats",
+                columns: table => new
+                {
+                    ChatId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SendUserId = table.Column<string>(type: "text", nullable: false),
+                    ReceiveUserId = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chats", x => x.ChatId);
+                    table.ForeignKey(
+                        name: "FK_Chats_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ExternalAccounts",
                 columns: table => new
                 {
@@ -242,6 +262,34 @@ namespace Infrastructure.Migrations
                         column: x => x.LocationId,
                         principalTable: "Locations",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messanges",
+                columns: table => new
+                {
+                    MessangeId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ChatId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    MessangeTest = table.Column<string>(type: "text", nullable: false),
+                    SendMessangeDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messanges", x => x.MessangeId);
+                    table.ForeignKey(
+                        name: "FK_Messanges_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Messanges_Chats_ChatId",
+                        column: x => x.ChatId,
+                        principalTable: "Chats",
+                        principalColumn: "ChatId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -391,6 +439,21 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Chats_UserId",
+                table: "Chats",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messanges_ChatId",
+                table: "Messanges",
+                column: "ChatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messanges_UserId",
+                table: "Messanges",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PostFiles_PostId",
                 table: "PostFiles",
                 column: "PostId");
@@ -449,6 +512,9 @@ namespace Infrastructure.Migrations
                 name: "ExternalAccounts");
 
             migrationBuilder.DropTable(
+                name: "Messanges");
+
+            migrationBuilder.DropTable(
                 name: "PostFiles");
 
             migrationBuilder.DropTable(
@@ -462,6 +528,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Chats");
 
             migrationBuilder.DropTable(
                 name: "PostLike");
