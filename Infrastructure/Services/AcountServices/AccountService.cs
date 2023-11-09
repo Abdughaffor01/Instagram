@@ -5,12 +5,12 @@ namespace Infrastructure.Services.AcountServices;
 
 public class AccountService : IAccountService
 {
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly DataContext _context;
     private readonly IConfiguration _configuration;
     private readonly IEmailService _emailService;
 
-    public AccountService(UserManager<User> userManager,
+    public AccountService(UserManager<ApplicationUser> userManager,
         IConfiguration configuration,IEmailService emailService, DataContext context)
     {
         _userManager = userManager;
@@ -21,7 +21,7 @@ public class AccountService : IAccountService
 
     public async Task<Response<RegisterDto>> Register(RegisterDto model)
     {
-        var mapped = new User()
+        var mapped = new ApplicationUser()
         {
             UserName = model.Username,
         };
@@ -60,15 +60,15 @@ public class AccountService : IAccountService
     }
 
     //Method to generate The Token
-    private async Task<string> GenerateJwtToken(User user)
+    private async Task<string> GenerateJwtToken(ApplicationUser applicationUser)
     {
-        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+        var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
         var securityKey = new SymmetricSecurityKey(key);
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var claims = new List<Claim>()
         {
-            new Claim(JwtRegisteredClaimNames.Name, user.UserName!),
-            new Claim(JwtRegisteredClaimNames.Sid, user.Id),
+            new Claim(JwtRegisteredClaimNames.Name, applicationUser.UserName!),
+            new Claim(JwtRegisteredClaimNames.Sid, applicationUser.Id),
         };
 
         var token = new JwtSecurityToken(

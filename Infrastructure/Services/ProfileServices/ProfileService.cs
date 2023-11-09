@@ -7,12 +7,12 @@ namespace Infrastructure.Services.ProfileServices;
 
 public class ProfileService : IProfileService
 {
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IFileService _fileService;
     private readonly IMapper _mapper;
     private readonly DataContext _context;
 
-    public ProfileService(DataContext context, UserManager<User> userManager, IMapper mapper, IFileService fileService)
+    public ProfileService(DataContext context, UserManager<ApplicationUser> userManager, IMapper mapper, IFileService fileService)
     {
         _context = context;
         _userManager = userManager;

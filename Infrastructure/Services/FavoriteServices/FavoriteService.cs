@@ -5,10 +5,10 @@ namespace Infrastructure.Services.FavoriteServices;
 
 public class FavoriteService : IFavoriteService
 {
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly DataContext _context;
 
-    public FavoriteService(UserManager<User> userManager, DataContext context)
+    public FavoriteService(UserManager<ApplicationUser> userManager, DataContext context)
     {
         _userManager = userManager;
         _context = context;
