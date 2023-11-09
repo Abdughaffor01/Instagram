@@ -1,10 +1,12 @@
 namespace Infrastructure.Data;
 
-public class DataContext :IdentityDbContext<User>
+public class DataContext : IdentityDbContext<User>
 {
+
     public DataContext(DbContextOptions<DataContext> options) : base(options) {}
 
     public DbSet<Profile> Profiles  { get; set; }
+
     public DbSet<Post> Posts  { get; set; }
     
     public DbSet<PostViewUser> PostViewUsers { get; set; }
@@ -23,7 +25,11 @@ public class DataContext :IdentityDbContext<User>
     public DbSet<Chat> Chats { get; set; }
     
     public DbSet<Messange> Messanges { get; set; } 
+    
     public DbSet<PostFile> PostFiles { get; set; }
+    
+    public DbSet<Story> Stories { get; set; }
+    
     public DbSet<FavoriteUser> FavoriteUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,10 +38,10 @@ public class DataContext :IdentityDbContext<User>
             .HasKey(sg => new { sg.UserId, sg.PostViewId });
          modelBuilder.Entity<PostLikeUser>()
             .HasKey(sg => new { sg.UserId, sg.PostLikeId });
+
          modelBuilder.Entity<FavoriteUser>()
              .HasKey(sg => new { sg.UserId, sg.PostId });
-         
-         
+
 
         base.OnModelCreating(modelBuilder);  
     }
