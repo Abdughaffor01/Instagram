@@ -33,7 +33,7 @@ public class MessageServise : IMessageServise
         var user = await _context.Users.FindAsync(model.UserId);
 
         if (chat == null || user == null) return new Response<MessageDtos>(HttpStatusCode.BadRequest, "Error");
-        var addMessage = _mapper.Map<Messange>(model);
+        var addMessage = _mapper.Map<Message>(model);
 
         await _context.Messanges.AddAsync(addMessage);
         await _context.SaveChangesAsync();
@@ -44,15 +44,15 @@ public class MessageServise : IMessageServise
 
     public async Task<Response<MessageDtos>> UpdateMessange(MessageDtos model)
     {
-        var upMessage = await _context.Messanges.FindAsync(model.MessangeId);
+        var upMessage = await _context.Messanges.FindAsync(model.MessageId);
         var chat = await _context.Chats.FindAsync(model.ChatId);
         var user = await _context.Users.FindAsync(model.UserId);
         if (upMessage == null||chat==null||user==null) return new Response<MessageDtos>(HttpStatusCode.BadRequest,"Message not found");
 
         upMessage.UserId = model.UserId;
         upMessage.ChatId = model.ChatId;
-        upMessage.MessangeText = model.MessangeText;
-        upMessage.SendMessangeDate = model.SendMessangeDate;
+        upMessage.MessageText = model.MessageText;
+        upMessage.SendMessageDate = model.SendMessageDate;
         
         await _context.SaveChangesAsync();
         return new Response<MessageDtos>(HttpStatusCode.OK,"Message Update");

@@ -1,3 +1,4 @@
+using Domain.DTOs.MessangeDto;
 using Domain.Entities;
 
 namespace Domain.DTOs.ChatDto;
@@ -10,5 +11,6 @@ public class GetChatDto
     
     public string ReceiveUserId { get; set; }
     
-    public List<Messange> Messanges { get; set; }
+    public List<GetMessageDto> Messages { get; set; }
+    
 }

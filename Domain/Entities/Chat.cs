@@ -14,6 +14,6 @@ public class Chat
    
     public User User { get; set; }
     
-    public List<Messange> Messanges { get; set; }
+    public List<Message> Messages { get; set; }
     
   }
