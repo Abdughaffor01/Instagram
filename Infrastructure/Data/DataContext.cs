@@ -22,7 +22,7 @@ public class DataContext : IdentityDbContext<User>
     public DbSet<Location> Locations { get; set; }
     
     public DbSet<ExternalAccount> ExternalAccounts { get; set; }
-    
+
     public DbSet<Chat> Chats { get; set; }
     
     public DbSet<Message> Messanges { get; set; } 
@@ -30,8 +30,14 @@ public class DataContext : IdentityDbContext<User>
     public DbSet<PostFile> PostFiles { get; set; }
     
     public DbSet<Story> Stories { get; set; }
+    public DbSet<StoryLike> StoryLikes { get; set; }
+    public DbSet<StoryLikeUser> StoryLikeUsers { get; set; }
     
     public DbSet<FavoriteUser> FavoriteUsers { get; set; }
+
+    public DbSet<StoryView> StoryViews { get; set; }
+    public DbSet<StoryViewUser> StoryViewUsers { get; set; }
+
     
     public DbSet<PostFavorite> Favorites { get; set; }
 
