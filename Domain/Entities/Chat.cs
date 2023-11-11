@@ -12,7 +12,7 @@ public class Chat
 
     public string ReceiveUserId { get; set; }
 
-    public User User { get; set; }
+    public ApplicationUser ApplicationUser { get; set; }
 
     public List<Messange> Messanges { get; set; }
 }

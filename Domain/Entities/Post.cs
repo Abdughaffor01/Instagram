@@ -9,7 +9,7 @@ public class Post
     public int Id { get; set; }
 
     public string UserId { get; set; }
-    public User User { get; set; }
+    public ApplicationUser ApplicationUser { get; set; }
 
     [MaxLength(50)]
     public string Title { get; set; }
