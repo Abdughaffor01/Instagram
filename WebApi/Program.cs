@@ -32,7 +32,7 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPostService, PostService>();
 
 builder.Services.AddScoped<IMessageServise, MessageServise>();
-builder.Services.AddScoped<IChatServise, ChatServise>();
+builder.Services.AddScoped<IChatService, ChatService>();
 
 builder.Services.AddScoped<IFavoriteService,FavoriteService>();
 builder.Services.AddScoped<IProfileService,ProfileService>();

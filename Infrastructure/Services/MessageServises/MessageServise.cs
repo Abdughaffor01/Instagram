@@ -8,62 +8,44 @@ public class MessageServise : IMessageServise
 {
     private readonly DataContext _context;
     private readonly IMapper _mapper;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public MessageServise(DataContext context, IMapper mapper)
+    public MessageServise(DataContext context, IMapper mapper,UserManager<ApplicationUser> userManager)
     {
         _context = context;
         _mapper = mapper;
+        _userManager = userManager;
     }
-
-    public async Task<Response<List<MessageDtos>>> GetMessenges()
-    {
-        var messange = await _context.Messanges.ToListAsync();
-
-        if (messange == null) return new Response<List<MessageDtos>>(HttpStatusCode.BadRequest, "Messange not found");
-
-        var getMessange = _mapper.Map<List<MessageDtos>>(messange);
-
-        return new Response<List<MessageDtos>>(getMessange);
-    }
-
-    public async Task<Response<MessageDtos>> AddMessange(MessageDtos model)
+    public async Task<Response<MessageDtos>> AddMessange(string userId,MessageDtos model)
     {
 
         var chat = await _context.Chats.FindAsync(model.ChatId);
-        var user = await _context.Users.FindAsync(model.UserId);
 
-        if (chat == null || user == null) return new Response<MessageDtos>(HttpStatusCode.BadRequest, "Error");
-        var addMessage = _mapper.Map<Message>(model);
+        if (chat == null ) return new Response<MessageDtos>(HttpStatusCode.BadRequest, "Error");
+        var addMessage = new Message()
+        {
+        ChatId = model.ChatId,
+        UserId =  userId,
+        MessageText = model.MessageText,
+        SendMessageDate = model.SendMessageDate
+        };
 
-        await _context.Messanges.AddAsync(addMessage);
+        await _context.Messages.AddAsync(addMessage);
+        
         await _context.SaveChangesAsync();
 
         return new Response<MessageDtos>(HttpStatusCode.OK, "Message Added");
 
     }
 
-    public async Task<Response<MessageDtos>> UpdateMessange(MessageDtos model)
-    {
-        var upMessage = await _context.Messanges.FindAsync(model.MessageId);
-        var chat = await _context.Chats.FindAsync(model.ChatId);
-        var user = await _context.Users.FindAsync(model.UserId);
-        if (upMessage == null||chat==null||user==null) return new Response<MessageDtos>(HttpStatusCode.BadRequest,"Message not found");
-
-        upMessage.UserId = model.UserId;
-        upMessage.ChatId = model.ChatId;
-        upMessage.MessageText = model.MessageText;
-        upMessage.SendMessageDate = model.SendMessageDate;
-        
-        await _context.SaveChangesAsync();
-        return new Response<MessageDtos>(HttpStatusCode.OK,"Message Update");
-    }
+  
 
     public async Task<Response<MessageDtos>> DeleteMessage(int id)
     {
-        var deleteMessage = await _context.Messanges.FindAsync(id);
+        var deleteMessage = await _context.Messages.FindAsync(id);
         if (deleteMessage == null) return new Response<MessageDtos>(HttpStatusCode.BadRequest,"Message not found");
         
-        _context.Messanges.Remove(deleteMessage);
+        _context.Messages.Remove(deleteMessage);
         await _context.SaveChangesAsync();
         
         return new Response<MessageDtos>(HttpStatusCode.OK,"Messange Delete");

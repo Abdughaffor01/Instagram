@@ -24,7 +24,7 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     public DbSet<ExternalAccount> ExternalAccounts { get; set; }
     public DbSet<Chat> Chats { get; set; }
     
-    public DbSet<Message> Messanges { get; set; } 
+    public DbSet<Message> Messages { get; set; } 
     
     public DbSet<PostFile> PostFiles { get; set; }
     
@@ -36,6 +36,7 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     {
          modelBuilder.Entity<PostViewUser>()
             .HasKey(sg => new { sg.UserId, sg.PostViewId });
+        
          modelBuilder.Entity<PostLikeUser>()
             .HasKey(sg => new { sg.UserId, sg.PostLikeId });
 

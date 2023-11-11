@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
-  [ApiController]
-  [Route("controller")]
-  [Authorize]
-public class MessageController:ControllerBase
+
+[ApiController]
+[Route("controller")]
+[Authorize]
+public class MessageController : ControllerBase
 {
   private readonly IMessageServise _message;
 
@@ -17,16 +18,17 @@ public class MessageController:ControllerBase
     _message = message;
   }
 
-  [HttpGet("GetMessage")]
-  public async Task<Response<List<MessageDtos>>> GetMessages() => await _message.GetMessenges();
 
   [HttpDelete("DeleteMessage")]
   public async Task<Response<MessageDtos>> DeleteMessage(int id) => await _message.DeleteMessage(id);
 
   [HttpPost("AddMessage")]
-  public async Task<Response<MessageDtos>> AddMessage(MessageDtos model) => await _message.AddMessange(model);
+  public async Task<Response<MessageDtos>> AddMessage(MessageDtos model)
+  {
 
-  [HttpPut("UpdateMessage")]
-  public async Task<Response<MessageDtos>> UpdateMessage(MessageDtos model) => await _message.UpdateMessange(model);
+    var userId = User.Claims.FirstOrDefault(x => x.Type == "sid")!.Value;
 
+    return await _message.AddMessange(userId, model);
   }
+
+} 
