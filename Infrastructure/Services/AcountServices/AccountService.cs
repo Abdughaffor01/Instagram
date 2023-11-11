@@ -30,7 +30,7 @@ public class AccountService : IAccountService
 
         if (response.Succeeded)
         {
-            var profile = new Profile() { UserId = mapped.Id, };
+            var profile = new UserProfile() { UserId = mapped.Id, };
             var location = new Location() { UserId = mapped.Id };
             await _context.Profiles.AddAsync(profile);
             await _context.Locations.AddAsync(location);

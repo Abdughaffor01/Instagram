@@ -11,14 +11,14 @@ namespace WebApi.Controllers;
 public class StoryController : ControllerBase
 {
     private readonly IStoryService _service;
-    public StoryController(IStoryService service)=>_service = service;
+    public StoryController(IStoryService service) => _service = service;
 
 
     [HttpPost("AddStoryAsync")]
     public async Task<IActionResult> AddStoryAsync(AddStoryDto model)
     {
         var userId = User.Claims.FirstOrDefault(u => u.Type == "sid")!.Value;
-        var res = await _service.AddStoryAsync(userId,model);
+        var res = await _service.AddStoryAsync(userId, model);
         return StatusCode(res.StatusCode, res);
     }
 
@@ -42,17 +42,18 @@ public class StoryController : ControllerBase
         var res = await _service.AddLikeToStory(userId, storyLikeId);
         return new Response<bool>(true);
     }
+
     [HttpPost("AddViewToStory")]
     public async Task<Response<bool>> AddViewToStory(string userId, int storyViewId)
     {
         var res = await _service.AddViewToStory(userId, storyViewId);
         return new Response<bool>(true);
-
+    }
 
     [HttpGet("GetArchiveStoriesAsync")]
     public async Task<IActionResult> GetArchiveStoriesAsync()
     {
-        var userId= User.Claims.FirstOrDefault(u => u.Type == "sid")!.Value;
+        var userId = User.Claims.FirstOrDefault(u => u.Type == "sid")!.Value;
         var res = await _service.GetArchiveStoriesAsync(userId);
         return StatusCode(res.StatusCode, res);
     }

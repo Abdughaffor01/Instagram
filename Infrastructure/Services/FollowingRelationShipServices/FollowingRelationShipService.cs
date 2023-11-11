@@ -26,8 +26,8 @@ public class FollowingRelationShipService : IFollowingRelationShipService
                             {
                                 UserId = fr.UserId,
                                 UserName = fr.User.UserName,
-                                Fullname = (fr.User.Profile.FirstName + " " + f.User.Profile.LastName),
-                                UserPhoto = fr.User.Profile.Photo
+                                Fullname = (fr.User.UserProfile.FirstName + " " + f.User.UserProfile.LastName),
+                                UserPhoto = fr.User.UserProfile.Photo
                             }
                         }).ToList(),
                     Subscriptions = (from fr in followingRelationShips
@@ -39,8 +39,8 @@ public class FollowingRelationShipService : IFollowingRelationShipService
                             {
                                 UserId = fr.FollowingId,
                                 UserName = fr.Following.UserName,
-                                Fullname = (fr.Following.Profile.FirstName + " " + f.Following.Profile.LastName),
-                                UserPhoto = fr.Following.Profile.Photo
+                                Fullname = (fr.Following.UserProfile.FirstName + " " + f.Following.UserProfile.LastName),
+                                UserPhoto = fr.Following.UserProfile.Photo
                             }
                         }).ToList()
                 }).FirstOrDefaultAsync();

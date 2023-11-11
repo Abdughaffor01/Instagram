@@ -5,7 +5,7 @@ public class DataContext : IdentityDbContext<User>
 
     public DataContext(DbContextOptions<DataContext> options) : base(options) {}
 
-    public DbSet<Profile> Profiles  { get; set; }
+    public DbSet<UserProfile> Profiles  { get; set; }
 
     public DbSet<Post> Posts  { get; set; }
     
