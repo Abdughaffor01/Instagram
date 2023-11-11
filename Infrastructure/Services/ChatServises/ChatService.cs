@@ -9,9 +9,9 @@ public class ChatService:IChatService
 {
     private readonly DataContext _cotext;
     private readonly IMapper _mapper;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<User> _userManager;
 
-    public ChatService(DataContext cotext,IMapper mapper,UserManager<ApplicationUser> userManager)
+    public ChatService(DataContext cotext,IMapper mapper,UserManager<User> userManager)
     {
         _cotext = cotext;
         _mapper = mapper;

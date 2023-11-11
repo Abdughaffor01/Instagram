@@ -2,13 +2,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities;
 
-public class PostViewUser
+public class StoryViewUser
 {
     public int Id { get; set; }
     [MaxLength(100)]
     public string UserId { get; set; }
-    public ApplicationUser ApplicationUser { get; set; }
+    public User User { get; set; }
     
-    public int PostViewId { get; set; }
-    public PostView PostView { get; set; }
+    public int StoryViewId { get; set; }
+    public StoryView StoryView { get; set; }
 }

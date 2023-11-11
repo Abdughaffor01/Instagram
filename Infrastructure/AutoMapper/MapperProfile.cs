@@ -10,7 +10,7 @@ public class MapperProfile : AutoMapper.Profile
     {
         CreateMap<Post,GetPostDto>();
 
-        CreateMap<UpdateProfileDto, Profile>().ReverseMap();
+        CreateMap<UpdateProfileDto, UserProfile>().ReverseMap();
         
         CreateMap<Chat, GetChatDto>().ReverseMap();
         

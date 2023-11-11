@@ -10,9 +10,10 @@ public class Chat
 
     public string SendUserId { get; set; }
     
-    public ApplicationUser SendUser { get; set; }
+    public User SendUser { get; set; }
     public string ReceiveUserId { get; set; }
-    
-    public ApplicationUser ReceiveUser { get; set; }
+
+    public User ReceiveUser { get; set; }
+
     public List<Message> Messages { get; set; }
 }

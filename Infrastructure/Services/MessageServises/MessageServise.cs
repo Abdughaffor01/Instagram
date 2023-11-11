@@ -8,9 +8,9 @@ public class MessageServise : IMessageServise
 {
     private readonly DataContext _context;
     private readonly IMapper _mapper;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<User> _userManager;
 
-    public MessageServise(DataContext context, IMapper mapper,UserManager<ApplicationUser> userManager)
+    public MessageServise(DataContext context, IMapper mapper,UserManager<User> userManager)
     {
         _context = context;
         _mapper = mapper;

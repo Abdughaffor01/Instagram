@@ -1,21 +1,21 @@
-using Domain.DTOs.FavoriteDTOs;
+using Domain.DTOs.PostDTOs;
 using Infrastructure.Data;
 
 namespace Infrastructure.Services.FavoriteServices;
 
 public class FavoriteService : IFavoriteService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly DataContext _context;
 
-    public FavoriteService(UserManager<ApplicationUser> userManager, DataContext context)
+    public FavoriteService(UserManager<User> userManager, DataContext context)
     {
         _userManager = userManager;
         _context = context;
     }
 
 
-    public async Task<Response<bool>> AddFavoriteToUser(string userId,int postId)
+    public async Task<Response<bool>> AddFavoriteToUser(string userId, int postId)
     {
         try
         {
@@ -49,23 +49,44 @@ public class FavoriteService : IFavoriteService
         }
     }
 
-    public async Task<Response<List<GetFavoriteDto>>> GetFavoritesByUserId(string userId)
+    public async Task<Response<List<GetPostDto>>> GetFavoritesByUserId(string userId)
     {
         try
         {
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return new Response<List<GetFavoriteDto>>(HttpStatusCode.BadRequest, "No exist user");
-            var favorites = await _context.FavoriteUsers
-                .Where(fu => fu.UserId == userId).Select(fu => new GetFavoriteDto()
+            if (user == null) return new Response<List<GetPostDto>>(HttpStatusCode.BadRequest, "No exist user");
+            var favorites = await _context.FavoriteUsers.Where(fu => fu.UserId == userId)
+                .Select(fu => new GetPostDto()
                 {
-                    PostId = fu.PostId,
-                    FileName = fu.Post.PostFiles.Select(u => u.Name).FirstOrDefault()!
+                    Id = fu.Post.Id,
+                    UserId = fu.UserId,
+                    DatePublished = fu.Post.DatePublished,
+                    Title = fu.Post.Title,
+                    Content = fu.Post.Content,
+                    PostFiles = fu.Post.PostFiles.Select(pf => pf.Name).ToList(),
+                    PostViews = new PostViewDto()
+                    {
+                        View = fu.Post.PostViews.View,
+                        Users = fu.Post.PostViews.Users.Select(u => new PostViewUserDto()
+                        {
+                            UserId = u.User.Id
+                        }).ToList()
+                    },
+                    PostLikes = new PostLikeDto()
+                    {
+                        Like = fu.Post.PostLikes.Like,
+                        Users = fu.Post.PostLikes.Users.Select(u => new PostLikeUserDto()
+                        {
+                            UserId = u.User.Id
+                        }).ToList()
+                    },
                 }).ToListAsync();
-            return new Response<List<GetFavoriteDto>>(favorites);
+            if (favorites.Count == 0) return new Response<List<GetPostDto>>(HttpStatusCode.NotFound, "No favorites");
+            return new Response<List<GetPostDto>>(favorites);
         }
         catch (Exception ex)
         {
-            return new Response<List<GetFavoriteDto>>(HttpStatusCode.InternalServerError, ex.Message);
+            return new Response<List<GetPostDto>>(HttpStatusCode.InternalServerError, ex.Message);
         }
     }
 }

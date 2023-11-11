@@ -9,10 +9,10 @@ public class PostService : IPostService
 {
     private readonly DataContext _context;
     private readonly IMapper _mapper;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly IFileService _fileService;
 
-    public PostService(DataContext context, IMapper mapper, UserManager<ApplicationUser> userManager, IFileService fileService)
+    public PostService(DataContext context, IMapper mapper, UserManager<User> userManager, IFileService fileService)
     {
         _context = context;
         _mapper = mapper;
@@ -44,7 +44,10 @@ public class PostService : IPostService
                 PostLikes = new PostLikeDto()
                 {
                     Like = p.PostLikes.Like,
-                    Users = p.PostLikes.Users.ToList()
+                    Users = p.PostViews.Users.Select(u => new PostLikeUserDto()
+                    {
+                        UserId = u.UserId
+                    }).ToList()
                 }
             }).ToListAsync();
             if (posts.Count == 0)
@@ -80,7 +83,10 @@ public class PostService : IPostService
                 PostLikes = new PostLikeDto()
                 {
                     Like = p.PostLikes.Like,
-                    Users = p.PostLikes.Users.ToList()
+                    Users = p.PostViews.Users.Select(u => new PostLikeUserDto()
+                    {
+                        UserId = u.UserId
+                    }).ToList()
                 }
             }).FirstOrDefaultAsync(p => p.Id == postId);
             if (post == null)

@@ -3,11 +3,11 @@ using Domain.Enums;
 
 namespace Domain.Entities;
 
-public class Profile
+public class UserProfile
 {
     [Key]
     public string UserId { get; set; }
-    public ApplicationUser User { get; set; }
+    public User User { get; set; }
     
     [MaxLength(50)]
     public string? FirstName { get; set; }
@@ -17,7 +17,7 @@ public class Profile
 
     public Gender? Gender { get; set; }
     
-    public DateOnly? DOB { get; set; }
+    public DateTime? DOB { get; set; }
     
     [MaxLength(50)]
     public string? Occupation { get; set; }

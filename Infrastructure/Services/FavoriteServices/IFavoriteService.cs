@@ -1,9 +1,9 @@
-using Domain.DTOs.FavoriteDTOs;
+using Domain.DTOs.PostDTOs;
 
 namespace Infrastructure.Services.FavoriteServices;
 
 public interface IFavoriteService
 {
     public Task<Response<bool>> AddFavoriteToUser(string userId,int postId);
-    public Task<Response<List<GetFavoriteDto>>> GetFavoritesByUserId(string userId);
+    public Task<Response<List<GetPostDto>>> GetFavoritesByUserId(string userId);
 }
