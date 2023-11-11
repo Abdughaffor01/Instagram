@@ -5,10 +5,10 @@ namespace Infrastructure.Services.FavoriteServices;
 
 public class FavoriteService : IFavoriteService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly DataContext _context;
 
-    public FavoriteService(UserManager<ApplicationUser> userManager, DataContext context)
+    public FavoriteService(UserManager<User> userManager, DataContext context)
     {
         _userManager = userManager;
         _context = context;
@@ -69,7 +69,7 @@ public class FavoriteService : IFavoriteService
                         View = fu.Post.PostViews.View,
                         Users = fu.Post.PostViews.Users.Select(u => new PostViewUserDto()
                         {
-                            UserId = u.ApplicationUser.Id
+                            UserId = u.User.Id
                         }).ToList()
                     },
                     PostLikes = new PostLikeDto()
@@ -77,7 +77,7 @@ public class FavoriteService : IFavoriteService
                         Like = fu.Post.PostLikes.Like,
                         Users = fu.Post.PostLikes.Users.Select(u => new PostLikeUserDto()
                         {
-                            UserId = u.ApplicationUser.Id
+                            UserId = u.User.Id
                         }).ToList()
                     },
                 }).ToListAsync();

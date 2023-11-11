@@ -5,5 +5,5 @@ namespace Domain.DTOs.PostDTOs;
 public class PostViewWithUser
 {
     public int CountView { get; set; }
-    public IEnumerable<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
+    public IEnumerable<User> Users { get; set; } = new List<User>();
 }
