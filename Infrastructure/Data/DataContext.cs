@@ -41,6 +41,8 @@ public class DataContext : IdentityDbContext<User>
     
     public DbSet<PostFavorite> Favorites { get; set; }
 
+    public DbSet<FollowingRelationShip> FollowingRelationShips { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
          modelBuilder.Entity<PostViewUser>()
@@ -50,7 +52,15 @@ public class DataContext : IdentityDbContext<User>
 
          modelBuilder.Entity<FavoriteUser>()
              .HasKey(sg => new { sg.UserId, sg.PostId });
+         
+         modelBuilder.Entity<FollowingRelationShip>()
+             .HasKey(sg => new { sg.UserId, sg.FollowingId });
 
+         modelBuilder.Entity<FollowingRelationShip>()
+             .HasOne<User>(u => u.User)
+             .WithMany(f => f.FollowingRelationShips)
+             .HasForeignKey(u => u.UserId);
+         
 
         base.OnModelCreating(modelBuilder);  
     }
