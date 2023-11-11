@@ -1,4 +1,3 @@
-
 using Domain.DTOs.StoryDTOs;
 using Infrastructure.Services.StoryServices;
 using Microsoft.AspNetCore.Authorization;
@@ -33,6 +32,14 @@ public class StoryController : ControllerBase
     public async Task<IActionResult> GetStoriesAsync()
     {
         var res = await _service.GetStoriesAsync();
+        return StatusCode(res.StatusCode, res);
+    }
+
+    [HttpGet("GetArchiveStoriesAsync")]
+    public async Task<IActionResult> GetArchiveStoriesAsync()
+    {
+        var userId= User.Claims.FirstOrDefault(u => u.Type == "sid")!.Value;
+        var res = await _service.GetArchiveStoriesAsync(userId);
         return StatusCode(res.StatusCode, res);
     }
 }

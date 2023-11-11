@@ -52,6 +52,8 @@ namespace Infrastructure.Services.StoryServices
             }
         }
 
+       
+
         public async Task<Response<string>> DeleteStoryAsync(int id)
         {
             try
@@ -71,7 +73,7 @@ namespace Infrastructure.Services.StoryServices
 
         public async Task<Response<ICollection<GetStoryDto>>> GetStoriesAsync()
         {
-            /*var storiesStatus =
+            var storiesStatus =
                 await _dataContext.Stories.Where(s => s.StatusStory == StatusStory.Active).ToListAsync();
             foreach (var story in storiesStatus)
             {
@@ -79,11 +81,13 @@ namespace Infrastructure.Services.StoryServices
                 {
                     story.StatusStory = StatusStory.Archive;
                 }
-            }*/
+            }
             await _dataContext.SaveChangesAsync();
             
             
-            var stories = await _dataContext.Stories.Select(s => new GetStoryDto()
+            var stories = await _dataContext.Stories
+                .Where(s=>s.StatusStory==StatusStory.Active)
+                .Select(s => new GetStoryDto()
             {
                 UserId = s.UserId,
                 PostId = s.PostId,
@@ -92,6 +96,29 @@ namespace Infrastructure.Services.StoryServices
             }).ToListAsync();
             
             return new Response<ICollection<GetStoryDto>>(stories);
+        }
+
+        public async Task<Response<ICollection<GetStoryDto>>> GetArchiveStoriesAsync(string userId)
+        {
+            try
+            {
+                var storiesArchive = await _dataContext.Stories
+                    .Where(s=>s.StatusStory==StatusStory.Archive)
+                    .Select(s => new GetStoryDto()
+                {
+                    UserId = s.UserId,
+                    PostId = s.PostId,
+                    CreatedAt = s.CreatedAt,
+                    FileName = s.FileName
+                }).ToListAsync();
+                if (storiesArchive.Count == 0)
+                    return new Response<ICollection<GetStoryDto>>(HttpStatusCode.NotFound, "Not archive stories");
+                return new Response<ICollection<GetStoryDto>>(storiesArchive);
+            }
+            catch (Exception ex)
+            {
+                return new Response<ICollection<GetStoryDto>>(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
 
         public async Task<Response<GetStoryDto>> GetStoryAsync(int id)

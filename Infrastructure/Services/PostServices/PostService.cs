@@ -44,7 +44,10 @@ public class PostService : IPostService
                 PostLikes = new PostLikeDto()
                 {
                     Like = p.PostLikes.Like,
-                    Users = p.PostLikes.Users.ToList()
+                    Users = p.PostViews.Users.Select(u => new PostLikeUserDto()
+                    {
+                        UserId = u.UserId
+                    }).ToList()
                 }
             }).ToListAsync();
             if (posts.Count == 0)
@@ -80,7 +83,10 @@ public class PostService : IPostService
                 PostLikes = new PostLikeDto()
                 {
                     Like = p.PostLikes.Like,
-                    Users = p.PostLikes.Users.ToList()
+                    Users = p.PostViews.Users.Select(u => new PostLikeUserDto()
+                    {
+                        UserId = u.UserId
+                    }).ToList()
                 }
             }).FirstOrDefaultAsync(p => p.Id == postId);
             if (post == null)

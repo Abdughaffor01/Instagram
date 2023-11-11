@@ -13,18 +13,26 @@ public class ProfileController : ControllerBase
 
 
     [HttpPut("UpdateProfileAsync")]
-    public async Task<IActionResult> UpdateProfileAsync([FromBody]UpdateProfileDto model)
+    public async Task<IActionResult> UpdateProfileAsync([FromForm]IFormFile photo,[FromBody]UpdateProfileDto model)
     {
         var userId = User.Claims.FirstOrDefault(u => u.Type == "sid")!.Value;
-        var res = await _service.UpdateProfileAsync(userId, model);
+        var res = await _service.UpdateProfileAsync(userId,model);
         return StatusCode(res.StatusCode, res);
     }
-    
-    [HttpPut("UpdateProfileAsync")]
-    public async Task<IActionResult> UpdatePhotoAsync(IFormFile photo)
+
+    [HttpPut("UpdatePhotoProfileAsync")]
+    public async Task<IActionResult> UpdatePhotoProfileAsync(IFormFile photo)
     {
         var userId = User.Claims.FirstOrDefault(u => u.Type == "sid")!.Value;
-        var res = await _service.UpdatePhotoAsync(userId, photo);
+        var res = await _service.UpdatePhotoProfileAsync(userId, photo);
+        return StatusCode(res.StatusCode, res);
+    }
+
+    [HttpGet("GetProfileByUserIdAsync")]
+    public async Task<IActionResult> GetProfileByUserIdAsync()
+    {
+        var userId = User.Claims.FirstOrDefault(u => u.Type == "sid")!.Value;
+        var res = await _service.GetProfileByUserIdAsync(userId);
         return StatusCode(res.StatusCode, res);
     }
 }
