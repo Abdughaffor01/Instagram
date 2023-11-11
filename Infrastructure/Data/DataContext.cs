@@ -29,8 +29,12 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     public DbSet<PostFile> PostFiles { get; set; }
     
     public DbSet<Story> Stories { get; set; }
+    public DbSet<StoryLike> StoryLikes { get; set; }
+    public DbSet<StoryLikeUser> StoryLikeUsers { get; set; }
     
     public DbSet<FavoriteUser> FavoriteUsers { get; set; }
+    public DbSet<StoryView> StoryViews { get; set; }
+    public DbSet<StoryViewUser> StoryViewUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

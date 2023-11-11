@@ -5,10 +5,10 @@ namespace Domain.Entities;
 public class ExternalAccount
 {
     [Key]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = null!;
 
     [MaxLength(100)]
     public string Name { get; set; }
 
-    public ApplicationUser ApplicationUser { get; set; }
+    public ApplicationUser User { get; set; }
 }
