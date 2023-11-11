@@ -4,7 +4,7 @@ namespace Domain.Entities;
 
 public class User : IdentityUser
 {
-    public Profile Profile { get; set; }
+    public UserProfile UserProfile { get; set; }
 
     public Location Location { get; set; }
 

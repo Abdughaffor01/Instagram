@@ -3,7 +3,7 @@ using Domain.Enums;
 
 namespace Domain.Entities;
 
-public class Profile
+public class UserProfile
 {
     [Key]
     public string UserId { get; set; }
