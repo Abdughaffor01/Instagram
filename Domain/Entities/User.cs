@@ -20,6 +20,9 @@ public class User : IdentityUser
     
     public IEnumerable<Chat> Chats { get; set; }
 
+    public PostFavorite PostFavorite { get; set; }
+
     public IEnumerable<FavoriteUser> FavoriteUsers { get; set; }
 
 }
+

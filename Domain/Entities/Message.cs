@@ -14,5 +14,6 @@ public class Message
   
     public Chat Chat { get; set; }
     
-    public User ApplicationUser { get; set; }
+    public User User { get; set; }
 }
+

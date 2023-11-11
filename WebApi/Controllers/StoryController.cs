@@ -1,4 +1,3 @@
-
 using Domain.DTOs.StoryDTOs;
 using Domain.Response;
 using Infrastructure.Services.StoryServices;
@@ -36,6 +35,7 @@ public class StoryController : ControllerBase
         var res = await _service.GetStoriesAsync();
         return StatusCode(res.StatusCode, res);
     }
+
     [HttpPost("AddLikeToStory")]
     public async Task<Response<bool>> AddLikeToStory(string userId, int storyLikeId)
     {
@@ -47,5 +47,13 @@ public class StoryController : ControllerBase
     {
         var res = await _service.AddViewToStory(userId, storyViewId);
         return new Response<bool>(true);
+
+
+    [HttpGet("GetArchiveStoriesAsync")]
+    public async Task<IActionResult> GetArchiveStoriesAsync()
+    {
+        var userId= User.Claims.FirstOrDefault(u => u.Type == "sid")!.Value;
+        var res = await _service.GetArchiveStoriesAsync(userId);
+        return StatusCode(res.StatusCode, res);
     }
 }

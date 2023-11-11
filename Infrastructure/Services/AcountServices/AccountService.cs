@@ -60,15 +60,16 @@ public class AccountService : IAccountService
     }
 
     //Method to generate The Token
-    private async Task<string> GenerateJwtToken(User applicationUser)
+
+    private async Task<string> GenerateJwtToken(User user)
     {
         var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
         var securityKey = new SymmetricSecurityKey(key);
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var claims = new List<Claim>()
         {
-            new Claim(JwtRegisteredClaimNames.Name, applicationUser.UserName!),
-            new Claim(JwtRegisteredClaimNames.Sid, applicationUser.Id),
+            new Claim(JwtRegisteredClaimNames.Name, user.UserName!),
+            new Claim(JwtRegisteredClaimNames.Sid, user.Id),
         };
 
         var token = new JwtSecurityToken(

@@ -12,7 +12,7 @@ public class Chat
 
     public string ReceiveUserId { get; set; }
 
-    public User ApplicationUser { get; set; }
+    public User User { get; set; }
 
     public List<Message> Messages { get; set; }
 }
