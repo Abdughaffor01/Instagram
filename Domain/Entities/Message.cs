@@ -1,6 +1,6 @@
-namespace Domain.DTOs.MessangeDto;
+namespace Domain.Entities;
 
-public class MessageDtos
+public class Message
 {
     public int  MessageId { get; set; }
    
@@ -11,5 +11,8 @@ public class MessageDtos
     public string MessageText { get; set; }
     
     public DateTime SendMessageDate { get; set; }
-
+  
+    public Chat Chat { get; set; }
+    
+    public User User { get; set; }
 }

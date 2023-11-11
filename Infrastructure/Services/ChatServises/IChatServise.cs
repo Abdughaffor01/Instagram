@@ -8,4 +8,5 @@ public interface IChatServise
     Task<Response<GetChatDto>> AddChat(AddChatDto model);
     Task<Response<GetChatDto>> UpdateChat(AddChatDto model);
     Task<Response<GetChatDto>> Delete(int id);
+    Task<Response<GetChatDto>> GetById(int id);
 }
