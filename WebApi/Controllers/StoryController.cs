@@ -47,7 +47,7 @@ public class StoryController : ControllerBase
     {
         var res = await _service.AddViewToStory(userId, storyViewId);
         return new Response<bool>(true);
-
+    }
 
     [HttpGet("GetArchiveStoriesAsync")]
     public async Task<IActionResult> GetArchiveStoriesAsync()
