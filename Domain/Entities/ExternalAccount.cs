@@ -10,5 +10,5 @@ public class ExternalAccount
     [MaxLength(100)]
     public string Name { get; set; }
 
-    public ApplicationUser User { get; set; }
+    public User User { get; set; }
 }

@@ -5,12 +5,12 @@ namespace Infrastructure.Services.AcountServices;
 
 public class AccountService : IAccountService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly DataContext _context;
     private readonly IConfiguration _configuration;
     private readonly IEmailService _emailService;
 
-    public AccountService(UserManager<ApplicationUser> userManager,
+    public AccountService(UserManager<User> userManager,
         IConfiguration configuration,IEmailService emailService, DataContext context)
     {
         _userManager = userManager;
@@ -21,7 +21,7 @@ public class AccountService : IAccountService
 
     public async Task<Response<RegisterDto>> Register(RegisterDto model)
     {
-        var mapped = new ApplicationUser()
+        var mapped = new User()
         {
             UserName = model.Username,
         };
@@ -60,7 +60,7 @@ public class AccountService : IAccountService
     }
 
     //Method to generate The Token
-    private async Task<string> GenerateJwtToken(ApplicationUser applicationUser)
+    private async Task<string> GenerateJwtToken(User applicationUser)
     {
         var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
         var securityKey = new SymmetricSecurityKey(key);

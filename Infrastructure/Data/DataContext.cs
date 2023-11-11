@@ -1,6 +1,6 @@
 namespace Infrastructure.Data;
 
-public class DataContext : IdentityDbContext<ApplicationUser>
+public class DataContext : IdentityDbContext<User>
 {
 
     public DataContext(DbContextOptions<DataContext> options) : base(options) {}
@@ -21,7 +21,7 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     
     public DbSet<Location> Locations { get; set; }
     
-    public DbSet<ExternalAccount> ExternalAccounts { get; set; }
+    public DbSet<User> ExternalAccounts { get; set; }
     public DbSet<Chat> Chats { get; set; }
     
     public DbSet<Message> Messanges { get; set; } 
