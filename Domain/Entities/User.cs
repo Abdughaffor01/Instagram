@@ -23,4 +23,6 @@ public class User : IdentityUser
     public PostFavorite PostFavorite { get; set; }
 
     public IEnumerable<FavoriteUser> FavoriteUsers { get; set; }
+    
+    public List<FollowingRelationShip> FollowingRelationShips { get; set; } = null!;
 }

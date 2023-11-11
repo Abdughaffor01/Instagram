@@ -9,6 +9,7 @@ using Infrastructure.Services.ChatServises;
 using Infrastructure.Services.EmailServices;
 using Infrastructure.Services.FavoriteServices;
 using Infrastructure.Services.FileServices;
+using Infrastructure.Services.FollowingRelationShipServices;
 using Infrastructure.Services.MessangeServises;
 using Infrastructure.Services.PostServices;
 using Infrastructure.Services.ProfileServices;
@@ -29,8 +30,8 @@ builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<IFileService,FileService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IPostService, PostService>();
 
+builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IMessageServise, MessageServise>();
 builder.Services.AddScoped<IChatServise, ChatServise>();
 
@@ -38,6 +39,8 @@ builder.Services.AddScoped<IFavoriteService,FavoriteService>();
 builder.Services.AddScoped<IProfileService,ProfileService>();
 
 builder.Services.AddScoped<IStoryService,StoryService>();
+builder.Services.AddScoped<IFollowingRelationShipService,FollowingRelationShipService>();
+
 
 
 builder.Services.AddAutoMapper(typeof(MapperProfile));
