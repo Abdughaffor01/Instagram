@@ -6,7 +6,7 @@ public class PostFavorite
 {
     [Key]
     public string UserId { get; set; }
-    public ApplicationUser ApplicationUser { get; set; }
+    public User User { get; set; }
 
     public int CountFavorite { get; set; }
     

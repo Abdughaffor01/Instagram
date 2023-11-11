@@ -1,6 +1,6 @@
 namespace Infrastructure.Data;
 
-public class DataContext : IdentityDbContext<ApplicationUser>
+public class DataContext : IdentityDbContext<User>
 {
 
     public DataContext(DbContextOptions<DataContext> options) : base(options) {}

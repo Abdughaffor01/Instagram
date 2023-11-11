@@ -44,7 +44,7 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddDbContext<DataContext>(c => c.UseNpgsql(connection));
 
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+builder.Services.AddIdentity<User, IdentityRole>(config =>
     {
         config.Password.RequiredLength = 4;
         config.Password.RequireDigit = false;
