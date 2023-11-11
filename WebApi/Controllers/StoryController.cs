@@ -1,4 +1,5 @@
 using Domain.DTOs.StoryDTOs;
+using Domain.Response;
 using Infrastructure.Services.StoryServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,19 @@ public class StoryController : ControllerBase
         var res = await _service.GetStoriesAsync();
         return StatusCode(res.StatusCode, res);
     }
+
+    [HttpPost("AddLikeToStory")]
+    public async Task<Response<bool>> AddLikeToStory(string userId, int storyLikeId)
+    {
+        var res = await _service.AddLikeToStory(userId, storyLikeId);
+        return new Response<bool>(true);
+    }
+    [HttpPost("AddViewToStory")]
+    public async Task<Response<bool>> AddViewToStory(string userId, int storyViewId)
+    {
+        var res = await _service.AddViewToStory(userId, storyViewId);
+        return new Response<bool>(true);
+
 
     [HttpGet("GetArchiveStoriesAsync")]
     public async Task<IActionResult> GetArchiveStoriesAsync()

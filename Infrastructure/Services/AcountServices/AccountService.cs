@@ -60,6 +60,7 @@ public class AccountService : IAccountService
     }
 
     //Method to generate The Token
+
     private async Task<string> GenerateJwtToken(User user)
     {
         var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
