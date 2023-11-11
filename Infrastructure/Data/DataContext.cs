@@ -1,6 +1,6 @@
 namespace Infrastructure.Data;
 
-public class DataContext : IdentityDbContext<ApplicationUser>
+public class DataContext : IdentityDbContext<User>
 {
 
     public DataContext(DbContextOptions<DataContext> options) : base(options) {}
@@ -22,6 +22,7 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     public DbSet<Location> Locations { get; set; }
     
     public DbSet<ExternalAccount> ExternalAccounts { get; set; }
+    
     public DbSet<Chat> Chats { get; set; }
     
     public DbSet<Messange> Messanges { get; set; } 
@@ -31,6 +32,8 @@ public class DataContext : IdentityDbContext<ApplicationUser>
     public DbSet<Story> Stories { get; set; }
     
     public DbSet<FavoriteUser> FavoriteUsers { get; set; }
+    
+    public DbSet<PostFavorite> Favorites { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

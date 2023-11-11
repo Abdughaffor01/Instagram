@@ -2,13 +2,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities;
 
-public class ExternalAccount
+public class PostFavorite
 {
     [Key]
     public string UserId { get; set; }
-
-    [MaxLength(100)]
-    public string Name { get; set; }
-
     public User User { get; set; }
+
+    public int CountFavorite { get; set; }
+    
+    public List<FavoriteUser> FavoriteUsers { get; set; }
 }

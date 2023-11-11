@@ -1,7 +1,9 @@
+using Domain.DTOs.PostDTOs;
+
 namespace Domain.DTOs.FavoriteDTOs;
 
 public class GetFavoriteDto
 {
-    public int PostId { get; set; }
-    public string FileName { get; set; }
+    public int CountFavorites { get; set; }
+    public List<GetPostDto> Posts { get; set; }
 }

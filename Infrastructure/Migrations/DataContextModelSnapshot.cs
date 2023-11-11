@@ -74,7 +74,12 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("integer");
 
+                    b.Property<string>("PostFavoriteUserId")
+                        .HasColumnType("text");
+
                     b.HasKey("UserId", "PostId");
+
+                    b.HasIndex("PostFavoriteUserId");
 
                     b.HasIndex("PostId");
 
@@ -167,6 +172,19 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PostFavorite", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("CountFavorite")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Favorites");
                 });
 
             modelBuilder.Entity("Domain.Entities.PostFile", b =>
@@ -264,8 +282,8 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<DateOnly?>("DOB")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("DOB")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("DateUpdated")
                         .HasColumnType("timestamp with time zone");
@@ -546,6 +564,10 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.FavoriteUser", b =>
                 {
+                    b.HasOne("Domain.Entities.PostFavorite", null)
+                        .WithMany("FavoriteUsers")
+                        .HasForeignKey("PostFavoriteUserId");
+
                     b.HasOne("Domain.Entities.Post", "Post")
                         .WithMany("FavoriteUsers")
                         .HasForeignKey("PostId")
@@ -598,6 +620,17 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("Post")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PostFavorite", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithOne("PostFavorite")
+                        .HasForeignKey("Domain.Entities.PostFavorite", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -772,6 +805,11 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.PostFavorite", b =>
+                {
+                    b.Navigation("FavoriteUsers");
+                });
+
             modelBuilder.Entity("Domain.Entities.PostLike", b =>
                 {
                     b.Navigation("Users");
@@ -797,6 +835,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("Messanges");
 
                     b.Navigation("Post");
+
+                    b.Navigation("PostFavorite")
+                        .IsRequired();
 
                     b.Navigation("PostLikeUsers");
 

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities;
 
-public class ApplicationUser : IdentityUser
+public class User : IdentityUser
 {
     public Profile Profile { get; set; }
 
@@ -19,6 +19,8 @@ public class ApplicationUser : IdentityUser
     public IEnumerable<Messange> Messanges { get; set; }
     
     public IEnumerable<Chat> Chats { get; set; }
+    
+    public PostFavorite PostFavorite { get; set; }
 
     public IEnumerable<FavoriteUser> FavoriteUsers { get; set; }
 }

@@ -196,6 +196,24 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Favorites",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    CountFavorite = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Favorites", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_Favorites_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Locations",
                 columns: table => new
                 {
@@ -246,7 +264,7 @@ namespace Infrastructure.Migrations
                     FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     Gender = table.Column<int>(type: "integer", nullable: true),
-                    DOB = table.Column<DateOnly>(type: "date", nullable: true),
+                    DOB = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Occupation = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     About = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     Photo = table.Column<string>(type: "text", nullable: true),
@@ -297,7 +315,8 @@ namespace Infrastructure.Migrations
                 {
                     UserId = table.Column<string>(type: "text", nullable: false),
                     PostId = table.Column<int>(type: "integer", nullable: false),
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    PostFavoriteUserId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -308,6 +327,11 @@ namespace Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FavoriteUsers_Favorites_PostFavoriteUserId",
+                        column: x => x.PostFavoriteUserId,
+                        principalTable: "Favorites",
+                        principalColumn: "UserId");
                     table.ForeignKey(
                         name: "FK_FavoriteUsers_Posts_PostId",
                         column: x => x.PostId,
@@ -493,6 +517,11 @@ namespace Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FavoriteUsers_PostFavoriteUserId",
+                table: "FavoriteUsers",
+                column: "PostFavoriteUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FavoriteUsers_PostId",
                 table: "FavoriteUsers",
                 column: "PostId");
@@ -585,6 +614,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Favorites");
 
             migrationBuilder.DropTable(
                 name: "Chats");
