@@ -1,3 +1,4 @@
+using Domain.Entities.UserEntities;
 using Domain.Enums;
 using Infrastructure.Data;
 

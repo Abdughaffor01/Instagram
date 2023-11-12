@@ -1,6 +1,7 @@
 using System.Text;
 using Domain.DTOs.EmailDTOs;
 using Domain.Entities;
+using Domain.Entities.UserEntities;
 using Infrastructure.Automapper;
 using Infrastructure.Data;
 using Infrastructure.Seed;

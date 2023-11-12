@@ -1,3 +1,4 @@
+using Domain.Entities.UserEntities;
 using Infrastructure.Data;
 using Infrastructure.Services.EmailServices;
 

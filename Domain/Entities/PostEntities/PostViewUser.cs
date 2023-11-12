@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using Domain.Entities.UserEntities;
 
-namespace Domain.Entities;
+namespace Domain.Entities.PostEntities;
 
 public class PostViewUser
 {

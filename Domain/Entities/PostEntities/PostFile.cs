@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities;
+namespace Domain.Entities.PostEntities;
 
 public class PostFile
 {

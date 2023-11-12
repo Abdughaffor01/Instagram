@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities;
+namespace Domain.Entities.StoryEntities;
 
 public class StoryLike
 {
     [Key]
     public int StoryId { get; set; }
-    public Story Story { get; set; }
+    public StoryEntities.Story Story { get; set; }
     
     public int Like { get; set; }
     

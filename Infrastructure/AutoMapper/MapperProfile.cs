@@ -1,6 +1,8 @@
 using Domain.DTOs.ChatDto;
 using Domain.DTOs.PostDTOs;
 using Domain.DTOs.ProfileDTOs;
+using Domain.Entities.PostEntities;
+using Domain.Entities.UserEntities;
 
 namespace Infrastructure.Automapper;
 

@@ -1,5 +1,6 @@
 using AutoMapper;
 using Domain.DTOs.ProfileDTOs;
+using Domain.Entities.UserEntities;
 using Infrastructure.Data;
 using Infrastructure.Services.FileServices;
 

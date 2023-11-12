@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Domain.Entities.PostEntities;
+using Domain.Entities.UserEntities;
 using Domain.Enums;
 
-namespace Domain.Entities;
+namespace Domain.Entities.StoryEntities;
 
 public class Story
 {
@@ -9,11 +11,16 @@ public class Story
     public int Id { get; set; }
     [MaxLength(50)]
     public string? FileName { get; set; }
+    
     public DateTime CreatedAt { get; set; }
     public StatusStory StatusStory { get; set; }
+    [MaxLength(100)]
     public string UserId { get; set; }
     public User User { get; set; }
 
     public int? PostId { get; set; }
-    public Post? Post { get; set; } = null;
+    public Post? Post { get; set; }
+
+    public StoryLike StoryLike { get; set; }
+    public StoryView StoryView { get; set; }
 }

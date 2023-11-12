@@ -1,4 +1,6 @@
-namespace Domain.Entities;
+using Domain.Entities.UserEntities;
+
+namespace Domain.Entities.PostEntities;
 
 public class PostLikeUser
 {

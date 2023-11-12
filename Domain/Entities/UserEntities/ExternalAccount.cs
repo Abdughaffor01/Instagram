@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities;
+namespace Domain.Entities.UserEntities;
 
 public class ExternalAccount
 {
     [Key]
+    [MaxLength(100)]
     public string UserId { get; set; } = null!;
 
     [MaxLength(100)]

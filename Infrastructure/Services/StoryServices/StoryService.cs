@@ -1,4 +1,6 @@
 ﻿using Domain.DTOs.StoryDTOs;
+using Domain.Entities.StoryEntities;
+using Domain.Entities.UserEntities;
 using Domain.Enums;
 using Infrastructure.Data;
 using Infrastructure.Services.FileServices;
@@ -11,7 +13,7 @@ namespace Infrastructure.Services.StoryServices
         private readonly UserManager<User> _userManager;
         private readonly IFileService _fileService;
 
-        public StoryService(DataContext dataContext,UserManager<User> userManager,
+        public StoryService(DataContext dataContext, UserManager<User> userManager,
             IFileService fileService)
         {
             _dataContext = dataContext;
@@ -25,11 +27,12 @@ namespace Infrastructure.Services.StoryServices
             {
                 var user = await _userManager.FindByIdAsync(userId);
                 var post = await _dataContext.Posts.FindAsync(model.PostId);
-                if (model.PostId == null && model.File == null)
+                if (model.PostId == null && model.File == null || user == null)
                     return new Response<int>(HttpStatusCode.BadRequest, "Something is wrong!");
-                if (model.PostId == null) return new Response<int>(HttpStatusCode.BadRequest, "Post not found!");
+
                 var fileName = string.Empty;
                 int? postId = null;
+
                 if (model.PostId != null) postId = model.PostId;
                 if (model.File != null) fileName = await _fileService.AddFileAsync(model.File!, "Files");
 
@@ -41,9 +44,26 @@ namespace Infrastructure.Services.StoryServices
                     FileName = fileName,
                     StatusStory = StatusStory.Active
                 };
-                
                 await _dataContext.Stories.AddAsync(story);
                 await _dataContext.SaveChangesAsync();
+                
+                var storyLike = new StoryLike()
+                {
+                     StoryId = story.Id,
+                     Like= 0
+                };
+                
+                var storyView = new StoryView()
+                {
+                    StoryId = story.Id,
+                    View = 0
+                };
+
+                await _dataContext.StoryLikes.AddAsync(storyLike);
+                await _dataContext.StoryViews.AddAsync(storyView);
+                
+                await _dataContext.SaveChangesAsync();
+                
                 return new Response<int>(story.Id);
             }
             catch (Exception ex)
@@ -52,7 +72,6 @@ namespace Infrastructure.Services.StoryServices
             }
         }
 
-       
 
         public async Task<Response<string>> DeleteStoryAsync(int id)
         {
@@ -82,17 +101,18 @@ namespace Infrastructure.Services.StoryServices
                     story.StatusStory = StatusStory.Archive;
                 }
             }
+
             await _dataContext.SaveChangesAsync();
 
             var stories = await _dataContext.Stories
-                .Where(s=>s.StatusStory==StatusStory.Active)
+                .Where(s => s.StatusStory == StatusStory.Active)
                 .Select(s => new GetStoryDto()
-            {
-                UserId = s.UserId,
-                PostId = s.PostId,
-                CreatedAt = s.CreatedAt,
-                FileName = s.FileName
-            }).ToListAsync();
+                {
+                    UserId = s.UserId,
+                    PostId = s.PostId,
+                    CreatedAt = s.CreatedAt,
+                    FileName = s.FileName!
+                }).ToListAsync();
 
             return new Response<ICollection<GetStoryDto>>(stories);
         }
@@ -102,14 +122,14 @@ namespace Infrastructure.Services.StoryServices
             try
             {
                 var storiesArchive = await _dataContext.Stories
-                    .Where(s=>s.StatusStory==StatusStory.Archive)
+                    .Where(s => s.StatusStory == StatusStory.Archive && s.UserId == userId)
                     .Select(s => new GetStoryDto()
-                {
-                    UserId = s.UserId,
-                    PostId = s.PostId,
-                    CreatedAt = s.CreatedAt,
-                    FileName = s.FileName
-                }).ToListAsync();
+                    {
+                        UserId = s.UserId,
+                        PostId = s.PostId,
+                        CreatedAt = s.CreatedAt,
+                        FileName = s.FileName!
+                    }).ToListAsync();
                 if (storiesArchive.Count == 0)
                     return new Response<ICollection<GetStoryDto>>(HttpStatusCode.NotFound, "Not archive stories");
                 return new Response<ICollection<GetStoryDto>>(storiesArchive);
@@ -129,7 +149,7 @@ namespace Infrastructure.Services.StoryServices
                 UserId = story.UserId,
                 PostId = story.PostId,
                 CreatedAt = story.CreatedAt,
-                FileName = story.FileName
+                FileName = story.FileName!
             };
             return new Response<GetStoryDto>(mapped);
         }
@@ -140,16 +160,18 @@ namespace Infrastructure.Services.StoryServices
             {
                 var user = await _userManager.FindByIdAsync(userId);
                 var story = await _dataContext.Stories.FindAsync(storyLikeId);
-                if (user == null || story == null) return new Response<bool>(HttpStatusCode.BadRequest, "User or Story doesn't exist!");
-                var userLike = new StoryLikeUser()
-                {
-                    UserId = userId,
-                    StoryLikeId = storyLikeId
-                };
+                if (user == null || story == null)
+                    return new Response<bool>(HttpStatusCode.BadRequest, "User or Story doesn't exist!");
 
-                var userLikeExist = _dataContext.StoryLikeUsers.FirstOrDefaultAsync(sl => sl.StoryLikeId == storyLikeId && sl.UserId == userId);
-                if (userLikeExist == null)
+                var userLikeExist = await _dataContext.StoryLikeUsers
+                    .FirstOrDefaultAsync(sl => sl.StoryLikeId == storyLikeId && sl.UserId == userId);
+                if (userLikeExist == null!)
                 {
+                    var userLike = new StoryLikeUser()
+                    {
+                        UserId = userId,
+                        StoryLikeId = storyLikeId
+                    };
                     await _dataContext.StoryLikeUsers.AddAsync(userLike);
                     var storyLike = await _dataContext.StoryLikes.FirstOrDefaultAsync(sl => sl.StoryId == storyLikeId);
                     storyLike!.Like++;
@@ -158,8 +180,8 @@ namespace Infrastructure.Services.StoryServices
                 }
                 else
                 {
-                    // _dataContext.StoryLikeUsers.Remove(userLikeExist);
-                    var storyLike = await _dataContext.StoryLikes.FirstOrDefaultAsync(sl=> sl.StoryId == storyLikeId);
+                    _dataContext.StoryLikeUsers.Remove(userLikeExist);
+                    var storyLike = await _dataContext.StoryLikes.FirstOrDefaultAsync(sl => sl.StoryId == storyLikeId);
                     storyLike!.Like--;
                     await _dataContext.SaveChangesAsync();
                     return new Response<bool>(false);
@@ -177,17 +199,22 @@ namespace Infrastructure.Services.StoryServices
             {
                 var user = await _userManager.FindByIdAsync(userId);
                 var story = await _dataContext.Stories.FindAsync(storyViewId);
-                if (user == null || story == null) return new Response<bool>(HttpStatusCode.BadRequest,"User or Story doesn't exist!");
-                var viewUser = new StoryViewUser()
+                if (user == null || story == null)
+                    return new Response<bool>(HttpStatusCode.BadRequest, "User or Story doesn't exist!");
+
+                var viewStoryUser =
+                    _dataContext.StoryLikeUsers.FirstOrDefaultAsync(sv =>
+                        sv.UserId == userId && sv.StoryLikeId == storyViewId);
+                
+                if (viewStoryUser == null!)
                 {
-                    UserId = userId,
-                    StoryViewId = storyViewId
-                };
-                var viewStoryUser = _dataContext.StoryLikeUsers.FirstOrDefaultAsync(sv=> sv.UserId == userId && sv.StoryLikeId == storyViewId);
-                if (viewStoryUser == null)
-                {
+                    var viewUser = new StoryViewUser()
+                    {
+                        UserId = userId,
+                        StoryViewId = storyViewId
+                    };
                     await _dataContext.StoryViewUsers.AddAsync(viewUser);
-                    var viewStory = await _dataContext.StoryViews.FirstOrDefaultAsync(sv=> sv.StoryId == storyViewId);
+                    var viewStory = await _dataContext.StoryViews.FirstOrDefaultAsync(sv => sv.StoryId == storyViewId);
                     viewStory!.View++;
                 }
 

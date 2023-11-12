@@ -37,17 +37,19 @@ public class StoryController : ControllerBase
     }
 
     [HttpPost("AddLikeToStory")]
-    public async Task<Response<bool>> AddLikeToStory(string userId, int storyLikeId)
+    public async Task<IActionResult> AddLikeToStory(int storyLikeId)
     {
+        var userId = User.Claims.FirstOrDefault(u => u.Type == "sid")!.Value;
         var res = await _service.AddLikeToStory(userId, storyLikeId);
-        return new Response<bool>(true);
+        return StatusCode(res.StatusCode,res);
     }
 
     [HttpPost("AddViewToStory")]
-    public async Task<Response<bool>> AddViewToStory(string userId, int storyViewId)
+    public async Task<IActionResult> AddViewToStory(int storyViewId)
     {
+        var userId = User.Claims.FirstOrDefault(u => u.Type == "sid")!.Value;
         var res = await _service.AddViewToStory(userId, storyViewId);
-        return new Response<bool>(true);
+        return StatusCode(res.StatusCode, res);
     }
 
     [HttpGet("GetArchiveStoriesAsync")]

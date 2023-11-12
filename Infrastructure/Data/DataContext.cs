@@ -1,3 +1,7 @@
+using Domain.Entities.PostEntities;
+using Domain.Entities.StoryEntities;
+using Domain.Entities.UserEntities;
+
 namespace Infrastructure.Data;
 
 public class DataContext : IdentityDbContext<User>

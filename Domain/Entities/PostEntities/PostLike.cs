@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.VisualBasic.CompilerServices;
 
-namespace Domain.Entities;
+namespace Domain.Entities.PostEntities;
 
 public class PostLike
 {

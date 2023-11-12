@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities;
+namespace Domain.Entities.StoryEntities;
 
 public class StoryView
 {
@@ -9,5 +9,5 @@ public class StoryView
     public Story Story { get; set; }
 
     public int View { get; set; }
-    public List<StoryViewUser> Users { get; set; }
+    public IEnumerable<StoryViewUser> Users { get; set; }
 }

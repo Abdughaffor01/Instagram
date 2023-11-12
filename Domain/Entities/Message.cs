@@ -1,3 +1,5 @@
+using Domain.Entities.UserEntities;
+
 namespace Domain.Entities;
 
 public class Message

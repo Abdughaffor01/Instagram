@@ -1,3 +1,6 @@
+using Domain.Entities.PostEntities;
+using Domain.Entities.UserEntities;
+
 namespace Domain.Entities;
 
 public class FavoriteUser

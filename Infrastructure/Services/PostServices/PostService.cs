@@ -1,5 +1,7 @@
 using AutoMapper;
 using Domain.DTOs.PostDTOs;
+using Domain.Entities.PostEntities;
+using Domain.Entities.UserEntities;
 using Infrastructure.Data;
 using Infrastructure.Services.FileServices;
 
@@ -44,7 +46,7 @@ public class PostService : IPostService
                 PostLikes = new PostLikeDto()
                 {
                     Like = p.PostLikes.Like,
-                    Users = p.PostViews.Users.Select(u => new PostLikeUserDto()
+                    Users = p.PostLikes.Users.Select(u => new PostLikeUserDto()
                     {
                         UserId = u.UserId
                     }).ToList()

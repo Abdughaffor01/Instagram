@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.AccessControl;
+using Domain.Entities.UserEntities;
 
 namespace Domain.Entities;
 
