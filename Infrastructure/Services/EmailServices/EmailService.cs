@@ -11,13 +11,13 @@ public class EmailService : IEmailService
         _logger = logger;
     }
     
-    public void SendEmail(MessageDto message, TextFormat format)
+    public void SendEmail(MessageEmailDto message, TextFormat format)
     {
         var emailMessage = CreateEmailMessage(message, format);
         Send(emailMessage);
     }
 
-    private MimeMessage CreateEmailMessage(MessageDto message, TextFormat format)
+    private MimeMessage CreateEmailMessage(MessageEmailDto message, TextFormat format)
     {
         var emailMessage = new MimeMessage();
         emailMessage.From.Add(new MailboxAddress("mail", _configuration.From));

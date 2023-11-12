@@ -1,5 +1,3 @@
-using Domain.DTOs.ProfileDTOs;
-
 namespace Infrastructure.Services.ProfileServices;
 
 public interface IProfileService

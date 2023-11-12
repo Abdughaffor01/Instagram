@@ -1,5 +1,3 @@
-using Domain.DTOs.ChatDto;
-
 namespace Infrastructure.Services.ChatServises;
 
 public interface IChatServise

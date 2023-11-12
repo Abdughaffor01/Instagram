@@ -1,8 +1,5 @@
 using Domain.DTOs.PostDTOs;
-using Domain.Response;
 using Infrastructure.Services.PostServices;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
 

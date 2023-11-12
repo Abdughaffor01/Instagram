@@ -1,7 +1,3 @@
-using Domain.DTOs.FollowingRelationShipDTOs;
-using Domain.DTOs.UserDTOs;
-using Infrastructure.Data;
-
 namespace Infrastructure.Services.FollowingRelationShipServices;
 
 public class FollowingRelationShipService : IFollowingRelationShipService

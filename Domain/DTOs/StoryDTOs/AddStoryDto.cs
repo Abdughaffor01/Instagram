@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Domain.DTOs.StoryDTOs;
+﻿namespace Domain.DTOs.StoryDTOs;
 
 public class AddStoryDto
 {

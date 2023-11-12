@@ -1,14 +1,12 @@
-using Domain.DTOs.MessangeDto;
-
-namespace Infrastructure.Services.MessangeServises;
+namespace Infrastructure.Services.MessageServises;
 
 public interface IMessageServise
 {
-   Task<Response<List<MessageDtos>>> GetMessenges();
+   Task<Response<List<MessageDto>>> GetMessenges();
     
-   Task< Response<MessageDtos>> AddMessange(MessageDtos model);
+   Task< Response<MessageDto>> AddMessange(MessageDto model);
     
-   Task<Response<MessageDtos>> UpdateMessange(MessageDtos model);
+   Task<Response<MessageDto>> UpdateMessange(MessageDto model);
 
-   Task<Response<MessageDtos>> DeleteMessage(int id);
+   Task<Response<MessageDto>> DeleteMessage(int id);
 }

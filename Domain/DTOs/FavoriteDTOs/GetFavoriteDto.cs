@@ -1,5 +1,3 @@
-using Domain.DTOs.PostDTOs;
-
 namespace Domain.DTOs.FavoriteDTOs;
 
 public class GetFavoriteDto

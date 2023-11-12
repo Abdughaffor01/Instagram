@@ -1,8 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using Domain.Entities.PostEntities;
-using Domain.Entities.UserEntities;
-using Domain.Enums;
-
 namespace Domain.Entities.StoryEntities;
 
 public class Story

@@ -1,13 +1,11 @@
-using MimeKit;
-
 namespace Domain.DTOs.EmailDTOs;
 
-public class MessageDto
+public class MessageEmailDto
 {
     public List<MailboxAddress> To { get; set; }
     public string Subject { get; set; }
     public string Content { get; set; }
-    public MessageDto(IEnumerable<string> to, string subject, string content)
+    public MessageEmailDto(IEnumerable<string> to, string subject, string content)
     {
         To = new List<MailboxAddress>();
         

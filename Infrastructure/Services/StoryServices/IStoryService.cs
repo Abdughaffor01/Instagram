@@ -1,6 +1,4 @@
-﻿using Domain.DTOs.StoryDTOs;
-
-namespace Infrastructure.Services.StoryServices;
+﻿namespace Infrastructure.Services.StoryServices;
 
 public interface IStoryService
 {

@@ -1,7 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Domain.Entities.UserEntities;
-
 namespace Domain.Entities;
 
 public class FollowingRelationShip

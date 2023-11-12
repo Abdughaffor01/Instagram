@@ -1,5 +1,3 @@
-using Domain.DTOs.PostDTOs;
-
 namespace Infrastructure.Services.FavoriteServices;
 
 public interface IFavoriteService

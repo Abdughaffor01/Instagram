@@ -1,5 +1,3 @@
-using Domain.Entities;
-
 namespace Domain.DTOs.ChatDto;
 
 public class AddChatDto

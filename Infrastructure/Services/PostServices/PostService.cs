@@ -1,8 +1,4 @@
-using AutoMapper;
-using Domain.DTOs.PostDTOs;
 using Domain.Entities.PostEntities;
-using Domain.Entities.UserEntities;
-using Infrastructure.Data;
 using Infrastructure.Services.FileServices;
 
 namespace Infrastructure.Services.PostServices;

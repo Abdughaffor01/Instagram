@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-
 namespace Domain.DTOs.PostDTOs;
 
 public class AddPostDto : BasePostDto

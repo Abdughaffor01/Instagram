@@ -1,6 +1,6 @@
-namespace Domain.DTOs.MessangeDto;
+namespace Domain.DTOs.MessageDTOs;
 
-public class MessageDtos
+public class MessageDto
 {
     public int  MessageId { get; set; }
    

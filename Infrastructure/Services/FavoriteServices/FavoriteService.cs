@@ -1,7 +1,3 @@
-using Domain.DTOs.PostDTOs;
-using Domain.Entities.UserEntities;
-using Infrastructure.Data;
-
 namespace Infrastructure.Services.FavoriteServices;
 
 public class FavoriteService : IFavoriteService

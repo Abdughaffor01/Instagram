@@ -1,6 +1,3 @@
-using Domain.Entities;
-using Domain.Entities.UserEntities;
-
 namespace Domain.DTOs.PostDTOs;
 
 public class PostViewWithUser

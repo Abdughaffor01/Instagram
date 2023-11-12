@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using Domain.Entities.UserEntities;
-
 namespace Domain.Entities;
 
 public class Location

@@ -1,5 +1,3 @@
-using Domain.DTOs.FollowingRelationShipDTOs;
-
 namespace Infrastructure.Services.FollowingRelationShipServices;
 
 public interface IFollowingRelationShipService

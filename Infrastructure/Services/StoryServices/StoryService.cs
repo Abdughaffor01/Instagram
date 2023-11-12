@@ -1,111 +1,121 @@
-﻿using Domain.DTOs.StoryDTOs;
-using Domain.Entities.StoryEntities;
-using Domain.Entities.UserEntities;
-using Domain.Enums;
-using Infrastructure.Data;
-using Infrastructure.Services.FileServices;
+﻿namespace Infrastructure.Services.StoryServices;
 
-namespace Infrastructure.Services.StoryServices
+public class StoryService : IStoryService
 {
-    public class StoryService : IStoryService
+    private readonly DataContext _dataContext;
+    private readonly UserManager<User> _userManager;
+    private readonly IFileService _fileService;
+
+    public StoryService(DataContext dataContext, UserManager<User> userManager,
+        IFileService fileService)
     {
-        private readonly DataContext _dataContext;
-        private readonly UserManager<User> _userManager;
-        private readonly IFileService _fileService;
+        _dataContext = dataContext;
+        _userManager = userManager;
+        _fileService = fileService;
+    }
 
-        public StoryService(DataContext dataContext, UserManager<User> userManager,
-            IFileService fileService)
+    public async Task<Response<int>> AddStoryAsync(string userId, AddStoryDto model)
+    {
+        try
         {
-            _dataContext = dataContext;
-            _userManager = userManager;
-            _fileService = fileService;
-        }
+            var user = await _userManager.FindByIdAsync(userId);
+            var post = await _dataContext.Posts.FindAsync(model.PostId);
+            if (model.PostId == null && model.File == null || user == null)
+                return new Response<int>(HttpStatusCode.BadRequest, "Something is wrong!");
 
-        public async Task<Response<int>> AddStoryAsync(string userId, AddStoryDto model)
-        {
-            try
+            var fileName = string.Empty;
+            int? postId = null;
+
+            if (model.PostId != null) postId = model.PostId;
+            if (model.File != null) fileName = await _fileService.AddFileAsync(model.File!, "Files");
+
+            var story = new Story()
             {
-                var user = await _userManager.FindByIdAsync(userId);
-                var post = await _dataContext.Posts.FindAsync(model.PostId);
-                if (model.PostId == null && model.File == null || user == null)
-                    return new Response<int>(HttpStatusCode.BadRequest, "Something is wrong!");
+                UserId = userId,
+                PostId = postId,
+                CreatedAt = DateTime.UtcNow,
+                FileName = fileName,
+                StatusStory = StatusStory.Active
+            };
+            await _dataContext.Stories.AddAsync(story);
+            await _dataContext.SaveChangesAsync();
 
-                var fileName = string.Empty;
-                int? postId = null;
-
-                if (model.PostId != null) postId = model.PostId;
-                if (model.File != null) fileName = await _fileService.AddFileAsync(model.File!, "Files");
-
-                var story = new Story()
-                {
-                    UserId = userId,
-                    PostId = postId,
-                    CreatedAt = DateTime.UtcNow,
-                    FileName = fileName,
-                    StatusStory = StatusStory.Active
-                };
-                await _dataContext.Stories.AddAsync(story);
-                await _dataContext.SaveChangesAsync();
-                
-                var storyLike = new StoryLike()
-                {
-                     StoryId = story.Id,
-                     Like= 0
-                };
-                
-                var storyView = new StoryView()
-                {
-                    StoryId = story.Id,
-                    View = 0
-                };
-
-                await _dataContext.StoryLikes.AddAsync(storyLike);
-                await _dataContext.StoryViews.AddAsync(storyView);
-                
-                await _dataContext.SaveChangesAsync();
-                
-                return new Response<int>(story.Id);
-            }
-            catch (Exception ex)
+            var storyLike = new StoryLike()
             {
-                return new Response<int>(HttpStatusCode.InternalServerError, ex.Message);
-            }
-        }
+                StoryId = story.Id,
+                Like = 0
+            };
 
+            var storyView = new StoryView()
+            {
+                StoryId = story.Id,
+                View = 0
+            };
 
-        public async Task<Response<string>> DeleteStoryAsync(int id)
-        {
-            try
-            {
-                var story = await _dataContext.Stories.FindAsync(id);
-                if (story == null) return new Response<string>(HttpStatusCode.NotFound, "Data not found!");
-                if (story.FileName != "") await _fileService.DeleteFileAsync(story.FileName, "Files");
-                _dataContext.Stories.Remove(story);
-                await _dataContext.SaveChangesAsync();
-                return new Response<string>(HttpStatusCode.OK, "Story deleted!");
-            }
-            catch (Exception ex)
-            {
-                return new Response<string>(HttpStatusCode.InternalServerError, ex.Message);
-            }
-        }
-
-        public async Task<Response<ICollection<GetStoryDto>>> GetStoriesAsync()
-        {
-            var storiesStatus =
-                await _dataContext.Stories.Where(s => s.StatusStory == StatusStory.Active).ToListAsync();
-            foreach (var story in storiesStatus)
-            {
-                if (story.CreatedAt.AddMinutes(1) <= DateTime.UtcNow)
-                {
-                    story.StatusStory = StatusStory.Archive;
-                }
-            }
+            await _dataContext.StoryLikes.AddAsync(storyLike);
+            await _dataContext.StoryViews.AddAsync(storyView);
 
             await _dataContext.SaveChangesAsync();
 
-            var stories = await _dataContext.Stories
-                .Where(s => s.StatusStory == StatusStory.Active)
+            return new Response<int>(story.Id);
+        }
+        catch (Exception ex)
+        {
+            return new Response<int>(HttpStatusCode.InternalServerError, ex.Message);
+        }
+    }
+
+
+    public async Task<Response<string>> DeleteStoryAsync(int id)
+    {
+        try
+        {
+            var story = await _dataContext.Stories.FindAsync(id);
+            if (story == null) return new Response<string>(HttpStatusCode.NotFound, "Data not found!");
+            if (story.FileName != "") await _fileService.DeleteFileAsync(story.FileName, "Files");
+            _dataContext.Stories.Remove(story);
+            await _dataContext.SaveChangesAsync();
+            return new Response<string>(HttpStatusCode.OK, "Story deleted!");
+        }
+        catch (Exception ex)
+        {
+            return new Response<string>(HttpStatusCode.InternalServerError, ex.Message);
+        }
+    }
+
+    public async Task<Response<ICollection<GetStoryDto>>> GetStoriesAsync()
+    {
+        var storiesStatus =
+            await _dataContext.Stories.Where(s => s.StatusStory == StatusStory.Active).ToListAsync();
+        foreach (var story in storiesStatus)
+        {
+            if (story.CreatedAt.AddMinutes(1) <= DateTime.UtcNow)
+            {
+                story.StatusStory = StatusStory.Archive;
+            }
+        }
+
+        await _dataContext.SaveChangesAsync();
+
+        var stories = await _dataContext.Stories
+            .Where(s => s.StatusStory == StatusStory.Active)
+            .Select(s => new GetStoryDto()
+            {
+                UserId = s.UserId,
+                PostId = s.PostId,
+                CreatedAt = s.CreatedAt,
+                FileName = s.FileName!
+            }).ToListAsync();
+
+        return new Response<ICollection<GetStoryDto>>(stories);
+    }
+
+    public async Task<Response<ICollection<GetStoryDto>>> GetArchiveStoriesAsync(string userId)
+    {
+        try
+        {
+            var storiesArchive = await _dataContext.Stories
+                .Where(s => s.StatusStory == StatusStory.Archive && s.UserId == userId)
                 .Select(s => new GetStoryDto()
                 {
                     UserId = s.UserId,
@@ -113,118 +123,100 @@ namespace Infrastructure.Services.StoryServices
                     CreatedAt = s.CreatedAt,
                     FileName = s.FileName!
                 }).ToListAsync();
-
-            return new Response<ICollection<GetStoryDto>>(stories);
+            if (storiesArchive.Count == 0)
+                return new Response<ICollection<GetStoryDto>>(HttpStatusCode.NotFound, "Not archive stories");
+            return new Response<ICollection<GetStoryDto>>(storiesArchive);
         }
-
-        public async Task<Response<ICollection<GetStoryDto>>> GetArchiveStoriesAsync(string userId)
+        catch (Exception ex)
         {
-            try
-            {
-                var storiesArchive = await _dataContext.Stories
-                    .Where(s => s.StatusStory == StatusStory.Archive && s.UserId == userId)
-                    .Select(s => new GetStoryDto()
-                    {
-                        UserId = s.UserId,
-                        PostId = s.PostId,
-                        CreatedAt = s.CreatedAt,
-                        FileName = s.FileName!
-                    }).ToListAsync();
-                if (storiesArchive.Count == 0)
-                    return new Response<ICollection<GetStoryDto>>(HttpStatusCode.NotFound, "Not archive stories");
-                return new Response<ICollection<GetStoryDto>>(storiesArchive);
-            }
-            catch (Exception ex)
-            {
-                return new Response<ICollection<GetStoryDto>>(HttpStatusCode.InternalServerError, ex.Message);
-            }
+            return new Response<ICollection<GetStoryDto>>(HttpStatusCode.InternalServerError, ex.Message);
         }
+    }
 
-        public async Task<Response<GetStoryDto>> GetStoryAsync(int id)
+    public async Task<Response<GetStoryDto>> GetStoryAsync(int id)
+    {
+        var story = await _dataContext.Stories.FindAsync(id);
+        if (story == null) return new Response<GetStoryDto>(HttpStatusCode.NotFound, "Data not found!");
+        var mapped = new GetStoryDto()
         {
-            var story = await _dataContext.Stories.FindAsync(id);
-            if (story == null) return new Response<GetStoryDto>(HttpStatusCode.NotFound, "Data not found!");
-            var mapped = new GetStoryDto()
-            {
-                UserId = story.UserId,
-                PostId = story.PostId,
-                CreatedAt = story.CreatedAt,
-                FileName = story.FileName!
-            };
-            return new Response<GetStoryDto>(mapped);
-        }
+            UserId = story.UserId,
+            PostId = story.PostId,
+            CreatedAt = story.CreatedAt,
+            FileName = story.FileName!
+        };
+        return new Response<GetStoryDto>(mapped);
+    }
 
-        public async Task<Response<bool>> AddLikeToStory(string userId, int storyLikeId)
+    public async Task<Response<bool>> AddLikeToStory(string userId, int storyLikeId)
+    {
+        try
         {
-            try
-            {
-                var user = await _userManager.FindByIdAsync(userId);
-                var story = await _dataContext.Stories.FindAsync(storyLikeId);
-                if (user == null || story == null)
-                    return new Response<bool>(HttpStatusCode.BadRequest, "User or Story doesn't exist!");
+            var user = await _userManager.FindByIdAsync(userId);
+            var story = await _dataContext.Stories.FindAsync(storyLikeId);
+            if (user == null || story == null)
+                return new Response<bool>(HttpStatusCode.BadRequest, "User or Story doesn't exist!");
 
-                var userLikeExist = await _dataContext.StoryLikeUsers
-                    .FirstOrDefaultAsync(sl => sl.StoryLikeId == storyLikeId && sl.UserId == userId);
-                if (userLikeExist == null!)
+            var userLikeExist = await _dataContext.StoryLikeUsers
+                .FirstOrDefaultAsync(sl => sl.StoryLikeId == storyLikeId && sl.UserId == userId);
+            if (userLikeExist == null!)
+            {
+                var userLike = new StoryLikeUser()
                 {
-                    var userLike = new StoryLikeUser()
-                    {
-                        UserId = userId,
-                        StoryLikeId = storyLikeId
-                    };
-                    await _dataContext.StoryLikeUsers.AddAsync(userLike);
-                    var storyLike = await _dataContext.StoryLikes.FirstOrDefaultAsync(sl => sl.StoryId == storyLikeId);
-                    storyLike!.Like++;
-                    await _dataContext.SaveChangesAsync();
-                    return new Response<bool>(true);
-                }
-                else
-                {
-                    _dataContext.StoryLikeUsers.Remove(userLikeExist);
-                    var storyLike = await _dataContext.StoryLikes.FirstOrDefaultAsync(sl => sl.StoryId == storyLikeId);
-                    storyLike!.Like--;
-                    await _dataContext.SaveChangesAsync();
-                    return new Response<bool>(false);
-                }
-            }
-            catch (Exception ex)
-            {
-                return new Response<bool>(HttpStatusCode.InternalServerError, ex.Message);
-            }
-        }
-
-        public async Task<Response<bool>> AddViewToStory(string userId, int storyViewId)
-        {
-            try
-            {
-                var user = await _userManager.FindByIdAsync(userId);
-                var story = await _dataContext.Stories.FindAsync(storyViewId);
-                if (user == null || story == null)
-                    return new Response<bool>(HttpStatusCode.BadRequest, "User or Story doesn't exist!");
-
-                var viewStoryUser =
-                    _dataContext.StoryLikeUsers.FirstOrDefaultAsync(sv =>
-                        sv.UserId == userId && sv.StoryLikeId == storyViewId);
-                
-                if (viewStoryUser == null!)
-                {
-                    var viewUser = new StoryViewUser()
-                    {
-                        UserId = userId,
-                        StoryViewId = storyViewId
-                    };
-                    await _dataContext.StoryViewUsers.AddAsync(viewUser);
-                    var viewStory = await _dataContext.StoryViews.FirstOrDefaultAsync(sv => sv.StoryId == storyViewId);
-                    viewStory!.View++;
-                }
-
+                    UserId = userId,
+                    StoryLikeId = storyLikeId
+                };
+                await _dataContext.StoryLikeUsers.AddAsync(userLike);
+                var storyLike = await _dataContext.StoryLikes.FirstOrDefaultAsync(sl => sl.StoryId == storyLikeId);
+                storyLike!.Like++;
                 await _dataContext.SaveChangesAsync();
                 return new Response<bool>(true);
             }
-            catch (Exception ex)
+            else
             {
-                return new Response<bool>(HttpStatusCode.InternalServerError, ex.Message);
+                _dataContext.StoryLikeUsers.Remove(userLikeExist);
+                var storyLike = await _dataContext.StoryLikes.FirstOrDefaultAsync(sl => sl.StoryId == storyLikeId);
+                storyLike!.Like--;
+                await _dataContext.SaveChangesAsync();
+                return new Response<bool>(false);
             }
+        }
+        catch (Exception ex)
+        {
+            return new Response<bool>(HttpStatusCode.InternalServerError, ex.Message);
+        }
+    }
+
+    public async Task<Response<bool>> AddViewToStory(string userId, int storyViewId)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var story = await _dataContext.Stories.FindAsync(storyViewId);
+            if (user == null || story == null)
+                return new Response<bool>(HttpStatusCode.BadRequest, "User or Story doesn't exist!");
+
+            var viewStoryUser =
+                _dataContext.StoryLikeUsers.FirstOrDefaultAsync(sv =>
+                    sv.UserId == userId && sv.StoryLikeId == storyViewId);
+
+            if (viewStoryUser == null!)
+            {
+                var viewUser = new StoryViewUser()
+                {
+                    UserId = userId,
+                    StoryViewId = storyViewId
+                };
+                await _dataContext.StoryViewUsers.AddAsync(viewUser);
+                var viewStory = await _dataContext.StoryViews.FirstOrDefaultAsync(sv => sv.StoryId == storyViewId);
+                viewStory!.View++;
+            }
+
+            await _dataContext.SaveChangesAsync();
+            return new Response<bool>(true);
+        }
+        catch (Exception ex)
+        {
+            return new Response<bool>(HttpStatusCode.InternalServerError, ex.Message);
         }
     }
 }

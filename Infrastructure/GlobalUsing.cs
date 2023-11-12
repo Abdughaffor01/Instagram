@@ -23,3 +23,19 @@ global using Domain.Response;
 global using MailKit.Net.Smtp;
 global using MimeKit.Text;
 global using MimeKit;
+
+global using Domain.Entities.UserEntities;
+global using Infrastructure.Data;
+global using Infrastructure.Services.EmailServices;
+global using Domain.DTOs.ChatDto;
+global using AutoMapper;
+global using Domain.DTOs.MessageDTOs;
+global using Domain.DTOs.PostDTOs;
+global using Domain.DTOs.FollowingRelationShipDTOs;
+global using Domain.DTOs.UserDTOs;
+global using Domain.DTOs.ProfileDTOs;
+global using Infrastructure.Services.FileServices;
+global using Domain.DTOs.StoryDTOs;
+
+global using Domain.Entities.StoryEntities;
+global using Domain.Enums;

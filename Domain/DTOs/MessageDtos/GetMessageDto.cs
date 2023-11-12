@@ -1,4 +1,4 @@
-namespace Domain.DTOs.MessangeDto;
+namespace Domain.DTOs.MessageDTOs;
 
 public class GetMessageDto
 {

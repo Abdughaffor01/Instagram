@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Domain.Entities.StoryEntities;
 
 public class StoryLike

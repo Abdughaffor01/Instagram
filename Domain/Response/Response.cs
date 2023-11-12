@@ -1,5 +1,3 @@
-using System.Net;
-
 namespace Domain.Response;
 
 public class Response<T>

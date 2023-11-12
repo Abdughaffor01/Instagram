@@ -1,9 +1,5 @@
-using System.Net;
 using Domain.DTOs.FollowingRelationShipDTOs;
-using Domain.Response;
 using Infrastructure.Services.FollowingRelationShipServices;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
 

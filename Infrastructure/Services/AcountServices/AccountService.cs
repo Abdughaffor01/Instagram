@@ -1,7 +1,3 @@
-using Domain.Entities.UserEntities;
-using Infrastructure.Data;
-using Infrastructure.Services.EmailServices;
-
 namespace Infrastructure.Services.AcountServices;
 
 public class AccountService : IAccountService
@@ -103,7 +99,7 @@ public class AccountService : IAccountService
         if (existing == null) return new Response<string>(HttpStatusCode.BadRequest, "not found");
         var token = await _userManager.GeneratePasswordResetTokenAsync(existing);
         var url =$"http://localhost:5271/account/resetpassword?token={token}&email={forgotPasswordDto.Email}";
-        _emailService.SendEmail(new MessageDto(new []{forgotPasswordDto.Email},"reset password",$"<h1><a href=\"{url}\">reset password</a></h1>"),TextFormat.Html);
+        _emailService.SendEmail(new MessageEmailDto(new []{forgotPasswordDto.Email},"reset password",$"<h1><a href=\"{url}\">reset password</a></h1>"),TextFormat.Html);
         return new Response<string>(HttpStatusCode.OK, "reset password has been sent");
     }
 

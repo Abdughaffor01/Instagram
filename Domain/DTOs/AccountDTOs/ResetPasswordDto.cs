@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Domain.DTOs.AccountDTOs;
 public class ResetPasswordDto
 {

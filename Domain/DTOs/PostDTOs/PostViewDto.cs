@@ -1,5 +1,3 @@
-using Domain.Entities;
-
 namespace Domain.DTOs.PostDTOs;
 
 public class PostViewDto

@@ -1,5 +1,3 @@
-using Domain.DTOs.UserDTOs;
-
 namespace Domain.DTOs.FollowingRelationShipDTOs;
 
 public class SubscriptionsDto

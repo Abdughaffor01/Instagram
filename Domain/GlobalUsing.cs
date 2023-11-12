@@ -1,0 +1,12 @@
+global using System.ComponentModel.DataAnnotations;
+global using Domain.Entities.UserEntities;
+global using Domain.Entities.PostEntities;
+global using Domain.Enums;
+global using Microsoft.AspNetCore.Identity;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using MimeKit;
+global using Domain.DTOs.PostDTOs;
+global using Domain.DTOs.UserDTOs;
+global using Microsoft.AspNetCore.Http;
+global using System.Net;
+global using Domain.DTOs.MessageDTOs;

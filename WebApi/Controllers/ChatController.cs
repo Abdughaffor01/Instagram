@@ -1,9 +1,5 @@
 using Domain.DTOs.ChatDto;
-using Domain.Entities;
-using Domain.Response;
 using Infrastructure.Services.ChatServises;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
 [ApiController]

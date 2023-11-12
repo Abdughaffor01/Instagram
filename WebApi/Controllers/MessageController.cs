@@ -1,8 +1,5 @@
-using Domain.DTOs.MessangeDto;
-using Domain.Response;
-using Infrastructure.Services.MessangeServises;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using Domain.DTOs.MessageDTOs;
+using Infrastructure.Services.MessageServises;
 
 namespace WebApi.Controllers;
   [ApiController]
@@ -18,15 +15,15 @@ public class MessageController:ControllerBase
   }
 
   [HttpGet("GetMessage")]
-  public async Task<Response<List<MessageDtos>>> GetMessages() => await _message.GetMessenges();
+  public async Task<Response<List<MessageDto>>> GetMessages() => await _message.GetMessenges();
 
   [HttpDelete("DeleteMessage")]
-  public async Task<Response<MessageDtos>> DeleteMessage(int id) => await _message.DeleteMessage(id);
+  public async Task<Response<MessageDto>> DeleteMessage(int id) => await _message.DeleteMessage(id);
 
   [HttpPost("AddMessage")]
-  public async Task<Response<MessageDtos>> AddMessage(MessageDtos model) => await _message.AddMessange(model);
+  public async Task<Response<MessageDto>> AddMessage(MessageDto model) => await _message.AddMessange(model);
 
   [HttpPut("UpdateMessage")]
-  public async Task<Response<MessageDtos>> UpdateMessage(MessageDtos model) => await _message.UpdateMessange(model);
+  public async Task<Response<MessageDto>> UpdateMessage(MessageDto model) => await _message.UpdateMessange(model);
 
   }

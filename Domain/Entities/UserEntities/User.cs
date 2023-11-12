@@ -1,6 +1,3 @@
-using Domain.Entities.PostEntities;
-using Microsoft.AspNetCore.Identity;
-
 namespace Domain.Entities.UserEntities;
 
 public class User : IdentityUser

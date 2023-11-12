@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using Domain.Enums;
-
 namespace Domain.Entities.UserEntities;
 
 public class UserProfile
