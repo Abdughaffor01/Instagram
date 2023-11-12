@@ -2,32 +2,39 @@ using Domain.DTOs.ChatDto;
 using Infrastructure.Services.ChatServises;
 
 namespace WebApi.Controllers;
-[ApiController]
-[Route("controller")]
-[Authorize]
-public class ChatController
-{
-    private readonly IChatServise _chatServise;
 
-    public ChatController(IChatServise chatServise)
-    {
-        _chatServise = chatServise;
-    }
+[Route("[controller]")]
+[Authorize]
+public class ChatController : ControllerBase
+{
+    private readonly IChatServise _servise;
+    public ChatController(IChatServise servise) => _servise = servise;
 
     [HttpGet("GetChat")]
-    public Task<Response<List<GetChatDto>>> GetChat() => _chatServise.GetChats();
+    public async Task<IActionResult> GetChat()
+    {
+        var res = await _servise.GetChats();
+        return StatusCode(res.StatusCode, res);
+    }
 
     [HttpPost("AddChat")]
-    public async Task<Response<GetChatDto>> AddChat(AddChatDto model)
+    public async Task<IActionResult> AddChat(AddChatDto model)
     {
-        
-       return await _chatServise.AddChat(model);
+        var res = await _servise.AddChat(model);
+        return StatusCode(res.StatusCode, res);
     }
 
     [HttpPut("UpdateChat")]
-    public async Task<Response<GetChatDto>> UpdateChat(AddChatDto model) => await _chatServise.UpdateChat(model);
+    public async Task<IActionResult> UpdateChat(AddChatDto model)
+    {
+        var res = await _servise.UpdateChat(model);
+        return StatusCode(res.StatusCode, res);
+    }
 
     [HttpDelete("DeleteChat")]
-    public async Task<Response<GetChatDto>> Delete(int id) =>  await _chatServise.Delete(id);
-
+    public async Task<IActionResult> Delete(int id)
+    {
+        var res = await _servise.Delete(id);
+        return StatusCode(res.StatusCode, res);
+    }
 }

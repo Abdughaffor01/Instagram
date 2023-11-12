@@ -40,6 +40,32 @@ public class ProfileService : IProfileService
         }
     }
 
+    public async Task<Response<GetProfileDto>> GetProfileByIdAsync(string userId)
+    {
+        try
+        {
+            var profile = await _context.Profiles.Where(p=>p.UserId==userId)
+                .Select(p => new GetProfileDto()
+            {
+                UserId = p.UserId,
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                About = p.About,
+                Occupation = p.Occupation,
+                Gender = p.Gender.ToString()!,
+                Photo = p.Photo,
+                DateUpdated = p.DateUpdated,
+                DOB = p.DOB
+            }).FirstOrDefaultAsync(pr => pr.UserId == userId);
+            if (profile == null) return new Response<GetProfileDto>(HttpStatusCode.BadRequest, "not found profile");
+            return new Response<GetProfileDto>(profile);
+        }
+        catch (Exception ex)
+        {
+            return new Response<GetProfileDto>(HttpStatusCode.InternalServerError, ex.Message);
+        }
+    }
+
     public async Task<Response<UpdateProfileDto>> UpdateProfileAsync(string userId, UpdateProfileDto model)
     {
         try
