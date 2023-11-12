@@ -28,7 +28,8 @@ public class PostController : ControllerBase
     [HttpPost("AddPostAsync")]
     public async Task<IActionResult> AddPostAsync(AddPostDto model)
     {
-        var userId = User.Claims.FirstOrDefault(x => x.Type == "sid")!.Value;
+            var userId = User.Claims.FirstOrDefault(x => x.Type == "sid")!.Value;
+        
         var res = await _service.AddPostAsync(userId, model);
         return StatusCode(res.StatusCode, res);
     }

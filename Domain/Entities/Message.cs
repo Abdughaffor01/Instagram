@@ -16,4 +16,3 @@ public class Message
     
     public User User { get; set; }
 }
-

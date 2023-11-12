@@ -37,7 +37,7 @@ builder.Services.AddScoped<IFollowingRelationShipService,FollowingRelationShipSe
 
 //Mahmud
 builder.Services.AddScoped<IMessageServise, MessageServise>();
-builder.Services.AddScoped<IChatServise, ChatServise>();
+builder.Services.AddScoped<IChatService, ChatService>();
 
 //Shahrom
 builder.Services.AddScoped<IStoryService,StoryService>();

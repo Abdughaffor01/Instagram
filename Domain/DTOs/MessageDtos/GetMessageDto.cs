@@ -8,4 +8,5 @@ public class GetMessageDto
     public string MessageText { get; set; }
     
     public DateTime SendMessageDate { get; set; }
+
 }

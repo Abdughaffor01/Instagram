@@ -14,9 +14,9 @@ public class User : IdentityUser
     
     public IEnumerable<PostLikeUser> PostLikeUsers  { get; set; }
 
-    public IEnumerable<Message> Messanges { get; set; }
+    public IEnumerable<Message> Messages { get; set; }
     
-    public IEnumerable<Chat> Chats { get; set; }
+    // public IEnumerable<Chat> Chats { get; set; }
 
     public PostFavorite PostFavorite { get; set; }
 

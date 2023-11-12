@@ -3,6 +3,7 @@ using Infrastructure.Services.ChatServises;
 
 namespace WebApi.Controllers;
 
+
 [Route("[controller]")]
 [Authorize]
 public class ChatController : ControllerBase
@@ -20,6 +21,7 @@ public class ChatController : ControllerBase
     [HttpPost("AddChat")]
     public async Task<IActionResult> AddChat(AddChatDto model)
     {
+
         var res = await _servise.AddChat(model);
         return StatusCode(res.StatusCode, res);
     }

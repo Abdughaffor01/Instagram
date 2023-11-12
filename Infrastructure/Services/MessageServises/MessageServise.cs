@@ -13,7 +13,7 @@ public class MessageServise : IMessageServise
 
     public async Task<Response<List<MessageDto>>> GetMessenges()
     {
-        var messange = await _context.Messanges.ToListAsync();
+        var messange = await _context.Messages.ToListAsync();
 
         if (messange == null) return new Response<List<MessageDto>>(HttpStatusCode.BadRequest, "Messange not found");
 
@@ -31,7 +31,7 @@ public class MessageServise : IMessageServise
         if (chat == null || user == null) return new Response<MessageDto>(HttpStatusCode.BadRequest, "Error");
         var addMessage = _mapper.Map<Message>(model);
 
-        await _context.Messanges.AddAsync(addMessage);
+        await _context.Messages.AddAsync(addMessage);
         await _context.SaveChangesAsync();
 
         return new Response<MessageDto>(HttpStatusCode.OK, "Message Added");
@@ -40,7 +40,7 @@ public class MessageServise : IMessageServise
 
     public async Task<Response<MessageDto>> UpdateMessange(MessageDto model)
     {
-        var upMessage = await _context.Messanges.FindAsync(model.MessageId);
+        var upMessage = await _context.Messages.FindAsync(model.MessageId);
         var chat = await _context.Chats.FindAsync(model.ChatId);
         var user = await _context.Users.FindAsync(model.UserId);
         if (upMessage == null||chat==null||user==null) return new Response<MessageDto>(HttpStatusCode.BadRequest,"Message not found");
@@ -56,10 +56,10 @@ public class MessageServise : IMessageServise
 
     public async Task<Response<MessageDto>> DeleteMessage(int id)
     {
-        var deleteMessage = await _context.Messanges.FindAsync(id);
+        var deleteMessage = await _context.Messages.FindAsync(id);
         if (deleteMessage == null) return new Response<MessageDto>(HttpStatusCode.BadRequest,"Message not found");
         
-        _context.Messanges.Remove(deleteMessage);
+        _context.Messages.Remove(deleteMessage);
         await _context.SaveChangesAsync();
         
         return new Response<MessageDto>(HttpStatusCode.OK,"Messange Delete");
