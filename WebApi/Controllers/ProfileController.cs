@@ -33,4 +33,11 @@ public class ProfileController : ControllerBase
         var res = await _service.GetProfileByUserIdAsync(userId);
         return StatusCode(res.StatusCode, res);
     }
+
+    [HttpGet("GetProfileByIdAsync")]
+    public async Task<IActionResult> GetProfileByIdAsync(string userId)
+    {
+        var res = await _service.GetProfileByIdAsync(userId);
+        return StatusCode(res.StatusCode, res);
+    }
 }

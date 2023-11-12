@@ -24,22 +24,23 @@ var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
 
 // Add services to the container.
+//Abdughaffor
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<IFileService,FileService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
-
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IFavoriteService,FavoriteService>();
+builder.Services.AddScoped<IProfileService,ProfileService>();
+builder.Services.AddScoped<IFollowingRelationShipService,FollowingRelationShipService>();
+
+//Mahmud
 builder.Services.AddScoped<IMessageServise, MessageServise>();
 builder.Services.AddScoped<IChatService, ChatService>();
 
-builder.Services.AddScoped<IFavoriteService,FavoriteService>();
-builder.Services.AddScoped<IProfileService,ProfileService>();
-
+//Shahrom
 builder.Services.AddScoped<IStoryService,StoryService>();
-builder.Services.AddScoped<IFollowingRelationShipService,FollowingRelationShipService>();
-
 
 
 builder.Services.AddAutoMapper(typeof(MapperProfile));

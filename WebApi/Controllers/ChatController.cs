@@ -3,43 +3,40 @@ using Infrastructure.Services.ChatServises;
 
 namespace WebApi.Controllers;
 
-[ApiController]
-[Route("controller")]
+
+[Route("[controller]")]
 [Authorize]
 public class ChatController : ControllerBase
 {
-    private readonly IChatService _chatService;
-
-    public ChatController(IChatService chatService)
-    {
-        _chatService = chatService;
-    }
+    private readonly IChatServise _servise;
+    public ChatController(IChatServise servise) => _servise = servise;
 
     [HttpGet("GetChat")]
-    public async Task<Response<List<GetChatDto>>> GetChat()
+    public async Task<IActionResult> GetChat()
     {
-        var userId=User.Claims.FirstOrDefault(x=>x.Type=="sid")!.Value;
-
-    return await _chatService.GetChats(userId);
-}
-
-    [HttpGet("GetChatById")]
-    public async Task<Response<GetChatDto>> GetChatById(int id)
-    {
-        var userId = User.Claims.FirstOrDefault(x => x.Type == "sid")!.Value;
-
-       return await _chatService.GetById(id,userId);
+        var res = await _servise.GetChats();
+        return StatusCode(res.StatusCode, res);
     }
 
     [HttpPost("AddChat")]
-    public async Task<Response<GetChatDto>> AddChat(AddChatDto model)
+    public async Task<IActionResult> AddChat(AddChatDto model)
     {
-        var userId = User.Claims.FirstOrDefault(x => x.Type == "sid")!.Value;
-      
-        return await _chatService.AddChat(userId,model);
-        
+
+        var res = await _servise.AddChat(model);
+        return StatusCode(res.StatusCode, res);
     }
-    [HttpDelete("DeleteChat")] 
-    public async Task<Response<GetChatDto>> Delete(int id) =>  await _chatService.Delete(id);
-    
+
+    [HttpPut("UpdateChat")]
+    public async Task<IActionResult> UpdateChat(AddChatDto model)
+    {
+        var res = await _servise.UpdateChat(model);
+        return StatusCode(res.StatusCode, res);
+    }
+
+    [HttpDelete("DeleteChat")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var res = await _servise.Delete(id);
+        return StatusCode(res.StatusCode, res);
+    }
 }
