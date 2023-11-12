@@ -1,8 +1,3 @@
-using AutoMapper;
-using Domain.DTOs.ChatDto;
-using Domain.DTOs.MessangeDto;
-using Infrastructure.Data;
-
 namespace Infrastructure.Services.ChatServises;
 
 public class ChatService:IChatService
